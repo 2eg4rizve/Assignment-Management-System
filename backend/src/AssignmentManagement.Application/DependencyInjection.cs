@@ -14,6 +14,7 @@ public static class DependencyInjection
             typeof(CourseMappingProfile).Assembly);
 
         services.AddScoped<ICourseService, CourseService>();
+        services.AddScoped<ISubjectService, SubjectService>();
 
         return services;
     }

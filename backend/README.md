@@ -79,6 +79,27 @@ Implemented endpoints:
 
 All endpoints are protected by the Admin policy and pass cancellation tokens through every asynchronous layer. The slice includes AutoMapper, paging, search/filtering, validation metadata, audit fields, duplicate-code protection, Unit of Work, database-side counts, and PostgreSQL error translation.
 
+### Subjects
+
+```text
+SubjectsController
+  -> ISubjectService
+    -> SubjectService
+      -> ISubjectRepository
+        -> SubjectRepository : Repository<Subject>
+          -> ApplicationDbContext
+```
+
+Implemented endpoints:
+
+- `GET /api/v1/subjects`
+- `GET /api/v1/subjects/{id}`
+- `POST /api/v1/subjects`
+- `PUT /api/v1/subjects/{id}`
+- `DELETE /api/v1/subjects/{id}` (soft delete)
+
+All endpoints are Admin-protected and support cancellation. The slice includes AutoMapper, paging, search, active-state filtering, request validation, audit fields, normalized unique subject codes, Unit of Work, and EF Core asynchronous queries.
+
 ## Next implementation step
 
 Implement features vertically in this order:
