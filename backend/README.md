@@ -100,6 +100,18 @@ Implemented endpoints:
 
 All endpoints are Admin-protected and support cancellation. The slice includes AutoMapper, paging, search, active-state filtering, request validation, audit fields, normalized unique subject codes, Unit of Work, and EF Core asynchronous queries.
 
+### Teaching assignments
+
+Implemented endpoints:
+
+- `GET /api/v1/teaching-assignments`
+- `GET /api/v1/teaching-assignments/{id}`
+- `POST /api/v1/teaching-assignments`
+- `PUT /api/v1/teaching-assignments/{id}`
+- `DELETE /api/v1/teaching-assignments/{id}` (soft delete)
+
+All endpoints are Admin-protected. The slice validates active teachers, courses, and subjects; prevents duplicate teacher/course/subject combinations; and supports paging, search, and reference filters.
+
 ## Next implementation step
 
 Implement features vertically in this order:
