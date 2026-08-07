@@ -69,6 +69,18 @@ Implemented endpoints:
 
 Authentication uses short-lived JWT access tokens and rotating refresh tokens. Raw refresh tokens are returned only to the client; SHA-256 hashes are persisted. Invalid login attempts participate in the configured Identity lockout policy.
 
+### Users
+
+Implemented endpoints:
+
+- `GET /api/v1/users`
+- `GET /api/v1/users/{id}`
+- `POST /api/v1/users`
+- `PUT /api/v1/users/{id}`
+- `POST /api/v1/users/{id}/reset-password`
+
+All endpoints are Admin-protected. Accounts and passwords are managed through ASP.NET Core Identity, while account and role changes are committed transactionally. Listing supports role, active-state, search, and pagination filters.
+
 ### Courses
 
 ```text
