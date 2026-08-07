@@ -123,6 +123,20 @@ Implemented endpoints:
 
 All endpoints are Admin-protected. The slice validates active students and courses, prevents duplicate student/course enrollments, and supports paging, search, and reference filters.
 
+### Assignments
+
+Implemented endpoints:
+
+- `GET /api/v1/assignments`
+- `GET /api/v1/assignments/{id}`
+- `POST /api/v1/assignments`
+- `PUT /api/v1/assignments/{id}`
+- `DELETE /api/v1/assignments/{id}` (draft only)
+- `POST /api/v1/assignments/{id}/publish`
+- `POST /api/v1/assignments/{id}/close`
+
+Assignment reads are scoped by role: Admin sees all records, Teacher sees owned records, and Student sees published assignments for active course enrollments. Mutations enforce teacher ownership and optimistic concurrency.
+
 ## Next implementation step
 
 Implement features vertically in this order:

@@ -1,0 +1,51 @@
+using AssignmentManagement.Domain.Enums;
+
+namespace AssignmentManagement.Application.Assignments.Models;
+
+public sealed record AssignmentListReadModel(
+    Guid Id,
+    string Title,
+    Guid CourseId,
+    string CourseName,
+    Guid SubjectId,
+    string SubjectName,
+    Guid TeacherId,
+    string TeacherName,
+    DateTimeOffset DeadlineUtc,
+    decimal MaximumMarks,
+    AssignmentStatus Status,
+    bool AllowResubmission,
+    int? SubmissionCount,
+    bool? HasSubmitted,
+    SubmissionStatus? StudentSubmissionStatus,
+    DateTimeOffset CreatedAtUtc);
+
+public sealed record AssignmentDetailReadModel(
+    Guid Id,
+    string Title,
+    string Description,
+    Guid CourseId,
+    string CourseCode,
+    string CourseName,
+    string? AcademicYear,
+    string? Section,
+    Guid SubjectId,
+    string SubjectCode,
+    string SubjectName,
+    Guid TeacherId,
+    string TeacherName,
+    string TeacherEmail,
+    DateTimeOffset DeadlineUtc,
+    decimal MaximumMarks,
+    AssignmentStatus Status,
+    bool AllowResubmission,
+    DateTimeOffset? PublishedAtUtc,
+    DateTimeOffset CreatedAtUtc,
+    DateTimeOffset? UpdatedAtUtc,
+    uint Version,
+    Guid? SubmissionId,
+    SubmissionStatus? SubmissionStatus,
+    DateTimeOffset? SubmittedAtUtc,
+    DateTimeOffset? LastSubmittedAtUtc,
+    decimal? MarksAwarded,
+    string? Feedback);

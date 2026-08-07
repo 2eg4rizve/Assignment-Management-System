@@ -1,6 +1,8 @@
 using AssignmentManagement.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using AssignmentManagement.Domain.Exceptions;
+using System.ComponentModel.DataAnnotations;
 
 namespace AssignmentManagement.Api.Middleware;
 
@@ -18,6 +20,8 @@ public sealed class GlobalExceptionHandler(
             ForbiddenAccessException => (StatusCodes.Status403Forbidden, "Access forbidden"),
             ConflictException => (StatusCodes.Status409Conflict, "Resource conflict"),
             DataConcurrencyException => (StatusCodes.Status409Conflict, "Concurrency conflict"),
+            ValidationException => (StatusCodes.Status400BadRequest, "Validation failed"),
+            DomainException => (StatusCodes.Status400BadRequest, "Business rule violation"),
             _ => (StatusCodes.Status500InternalServerError, "An unexpected error occurred")
         };
 

@@ -39,6 +39,7 @@ public static class DependencyInjection
         services.AddScoped<ISubjectRepository, SubjectRepository>();
         services.AddScoped<ITeachingAssignmentRepository, TeachingAssignmentRepository>();
         services.AddScoped<ICourseEnrollmentRepository, CourseEnrollmentRepository>();
+        services.AddScoped<IAssignmentRepository, AssignmentRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
