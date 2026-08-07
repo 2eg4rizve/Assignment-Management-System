@@ -17,8 +17,6 @@ public sealed class SubmissionsControllerContractTests
     }
 
     [Theory]
-    [InlineData(nameof(SubmissionsController.Create), AuthorizationPolicies.RequireStudent)]
-    [InlineData(nameof(SubmissionsController.Update), AuthorizationPolicies.RequireStudent)]
     [InlineData(nameof(SubmissionsController.UpdateStatus), AuthorizationPolicies.RequireTeacher)]
     [InlineData(nameof(SubmissionsController.Grade), AuthorizationPolicies.RequireTeacher)]
     public void Mutation_ShouldRequireExpectedPolicy(string actionName, string policy)

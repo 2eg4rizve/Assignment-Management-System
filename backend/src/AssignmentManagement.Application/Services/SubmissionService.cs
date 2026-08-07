@@ -39,6 +39,16 @@ public sealed class SubmissionService(ISubmissionRepository repository, IUnitOfW
         return mapper.Map<SubmissionDetailResponse>(item);
     }
 
+    public async Task<SubmissionDetailResponse> GetMineByAssignmentAsync(Guid assignmentId,
+        CancellationToken cancellationToken = default)
+    {
+        var studentId = RequireStudent();
+        var submission = await repository.GetByAssignmentAndStudentAsync(
+            assignmentId, studentId, cancellationToken)
+            ?? throw new NotFoundException(nameof(Submission), assignmentId);
+        return await GetByIdAsync(submission.Id, cancellationToken);
+    }
+
     public async Task<SubmissionDetailResponse> CreateAsync(Guid assignmentId, CreateSubmissionRequest request,
         CancellationToken cancellationToken = default)
     {
@@ -70,6 +80,16 @@ public sealed class SubmissionService(ISubmissionRepository repository, IUnitOfW
         repository.Update(submission);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return ToMutationResponse(submission);
+    }
+
+    public async Task<SubmissionMutationResponse> UpdateMineByAssignmentAsync(Guid assignmentId,
+        UpdateSubmissionRequest request, CancellationToken cancellationToken = default)
+    {
+        var studentId = RequireStudent();
+        var submission = await repository.GetByAssignmentAndStudentAsync(
+            assignmentId, studentId, cancellationToken)
+            ?? throw new NotFoundException(nameof(Submission), assignmentId);
+        return await UpdateAsync(submission.Id, request, cancellationToken);
     }
 
     public async Task<SubmissionMutationResponse> UpdateStatusAsync(Guid id,
