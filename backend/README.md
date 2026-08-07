@@ -112,6 +112,17 @@ Implemented endpoints:
 
 All endpoints are Admin-protected. The slice validates active teachers, courses, and subjects; prevents duplicate teacher/course/subject combinations; and supports paging, search, and reference filters.
 
+### Course enrollments
+
+Implemented endpoints:
+
+- `GET /api/v1/enrollments`
+- `GET /api/v1/enrollments/{id}`
+- `POST /api/v1/enrollments`
+- `DELETE /api/v1/enrollments/{id}` (deactivate)
+
+All endpoints are Admin-protected. The slice validates active students and courses, prevents duplicate student/course enrollments, and supports paging, search, and reference filters.
+
 ## Next implementation step
 
 Implement features vertically in this order:
