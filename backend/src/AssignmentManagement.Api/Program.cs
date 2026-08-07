@@ -9,6 +9,7 @@ using System.Text;
 using AssignmentManagement.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using AssignmentManagement.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,8 @@ builder.Services.AddAuthorizationBuilder()
         policy => policy.RequireRole(ApplicationRoles.Student));
 
 var app = builder.Build();
+
+await app.Services.InitializeDatabaseAsync();
 
 if (app.Environment.IsDevelopment())
 {

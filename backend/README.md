@@ -55,6 +55,8 @@ The API references Application and Infrastructure only to compose dependencies. 
 - Core domain entities and assignment/submission state-transition rules
 - EF Core configurations, relationships, indexes, constraints, and PostgreSQL concurrency tokens
 - Shared soft deletion through `BaseEntity`, repository behavior, query filters, and filtered unique indexes
+- Initial PostgreSQL migration with automatic startup migration
+- Idempotent role seeding and configurable development demo data
 
 ## Completed vertical slices
 
@@ -183,6 +185,19 @@ dotnet build AssignmentManagement.sln
 dotnet test AssignmentManagement.sln
 dotnet run --project src/AssignmentManagement.Api
 ```
+
+On startup, the API applies pending migrations and ensures the `Admin`, `Teacher`, and
+`Student` roles exist. Development demo seeding is controlled by the `DemoSeed`
+configuration section. The checked-in development configuration creates these users:
+
+```text
+admin@assignment.local
+teacher@assignment.local
+student@assignment.local
+```
+
+They use the development-only password configured at `DemoSeed:Password`. Override or
+disable this configuration outside local development.
 
 The checked-in connection string is development-only. Use environment variables or user secrets for real credentials:
 

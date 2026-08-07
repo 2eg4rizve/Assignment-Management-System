@@ -40,6 +40,12 @@ public static class DependencyInjection
                 ? refreshTokenDays
                 : 7;
         });
+        var demoSeedSection = configuration.GetSection(DemoSeedOptions.SectionName);
+        services.Configure<DemoSeedOptions>(options =>
+        {
+            options.Enabled = bool.TryParse(demoSeedSection[nameof(DemoSeedOptions.Enabled)], out var enabled) && enabled;
+            options.Password = demoSeedSection[nameof(DemoSeedOptions.Password)] ?? string.Empty;
+        });
 
         services
             .AddIdentityCore<ApplicationUser>(options =>
