@@ -18,18 +18,24 @@ public sealed class SubmissionsController(ISubmissionService service) : Controll
         [FromQuery] SubmissionQueryRequest request, CancellationToken cancellationToken) =>
         Ok(await service.GetPagedAsync(request, cancellationToken));
 
+    [HttpGet("/api/v1/assignments/{assignmentId:guid}/submissions")]
+    public async Task<ActionResult<PagedResponse<SubmissionListItemResponse>>> GetForAssignment(
+        Guid assignmentId, [FromQuery] SubmissionQueryRequest request,
+        CancellationToken cancellationToken) =>
+        Ok(await service.GetPagedAsync(request with { AssignmentId = assignmentId }, cancellationToken));
+
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SubmissionDetailResponse>> GetById(
         Guid id, CancellationToken cancellationToken) =>
         Ok(await service.GetByIdAsync(id, cancellationToken));
 
-    [HttpPost("{id:guid}/status")]
+    [HttpPut("{id:guid}/review-status")]
     [Authorize(Policy = AuthorizationPolicies.RequireTeacher)]
     public async Task<ActionResult<SubmissionMutationResponse>> UpdateStatus(Guid id,
         [FromBody] UpdateSubmissionStatusRequest request, CancellationToken cancellationToken) =>
         Ok(await service.UpdateStatusAsync(id, request, cancellationToken));
 
-    [HttpPost("{id:guid}/grade")]
+    [HttpPut("{id:guid}/grade")]
     [Authorize(Policy = AuthorizationPolicies.RequireTeacher)]
     public async Task<ActionResult<SubmissionMutationResponse>> Grade(Guid id,
         [FromBody] GradeSubmissionRequest request, CancellationToken cancellationToken) =>
