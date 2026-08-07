@@ -58,6 +58,17 @@ The API references Application and Infrastructure only to compose dependencies. 
 
 ## Completed vertical slices
 
+### Authentication
+
+Implemented endpoints:
+
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/refresh`
+- `POST /api/v1/auth/logout`
+- `GET /api/v1/auth/me`
+
+Authentication uses short-lived JWT access tokens and rotating refresh tokens. Raw refresh tokens are returned only to the client; SHA-256 hashes are persisted. Invalid login attempts participate in the configured Identity lockout policy.
+
 ### Courses
 
 ```text
@@ -165,4 +176,9 @@ The checked-in connection string is development-only. Use environment variables 
 
 ```text
 ConnectionStrings__DefaultConnection
+Jwt__Issuer
+Jwt__Audience
+Jwt__Secret
+Jwt__AccessTokenMinutes
+Jwt__RefreshTokenDays
 ```

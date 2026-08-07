@@ -4,6 +4,7 @@ using AssignmentManagement.Infrastructure.Identity;
 using AssignmentManagement.Infrastructure.Persistence;
 using AssignmentManagement.Infrastructure.Persistence.Repositories;
 using AssignmentManagement.Infrastructure.Services;
+using AssignmentManagement.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,22 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
 
+        var jwtSection = configuration.GetSection(JwtSettings.SectionName);
+        services.Configure<JwtSettings>(options =>
+        {
+            options.Issuer = jwtSection[nameof(JwtSettings.Issuer)] ?? string.Empty;
+            options.Audience = jwtSection[nameof(JwtSettings.Audience)] ?? string.Empty;
+            options.Secret = jwtSection[nameof(JwtSettings.Secret)] ?? string.Empty;
+            options.AccessTokenMinutes = int.TryParse(
+                jwtSection[nameof(JwtSettings.AccessTokenMinutes)], out var accessTokenMinutes)
+                ? accessTokenMinutes
+                : 15;
+            options.RefreshTokenDays = int.TryParse(
+                jwtSection[nameof(JwtSettings.RefreshTokenDays)], out var refreshTokenDays)
+                ? refreshTokenDays
+                : 7;
+        });
+
         services
             .AddIdentityCore<ApplicationUser>(options =>
             {
@@ -40,6 +57,7 @@ public static class DependencyInjection
         services.AddScoped<ITeachingAssignmentRepository, TeachingAssignmentRepository>();
         services.AddScoped<ICourseEnrollmentRepository, CourseEnrollmentRepository>();
         services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 

@@ -17,6 +17,7 @@ public sealed class GlobalExceptionHandler(
         var (statusCode, title) = exception switch
         {
             NotFoundException => (StatusCodes.Status404NotFound, "Resource not found"),
+            AuthenticationFailedException => (StatusCodes.Status401Unauthorized, "Authentication failed"),
             ForbiddenAccessException => (StatusCodes.Status403Forbidden, "Access forbidden"),
             ConflictException => (StatusCodes.Status409Conflict, "Resource conflict"),
             DataConcurrencyException => (StatusCodes.Status409Conflict, "Concurrency conflict"),
