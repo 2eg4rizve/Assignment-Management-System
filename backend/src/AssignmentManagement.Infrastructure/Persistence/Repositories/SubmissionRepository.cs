@@ -69,16 +69,18 @@ public sealed class SubmissionRepository : Repository<Submission>, ISubmissionRe
                  : null, item.Version))
         .SingleOrDefaultAsync(cancellationToken);
 
-    public Task<bool> CanStudentSubmitAsync(Guid assignmentId, Guid studentId,
+    public Task<bool> CanStudentSubmitAsync(Guid assignmentId, Guid studentId, DateTimeOffset utcNow,
         CancellationToken cancellationToken = default) => _dbContext.Assignments.AnyAsync(assignment =>
             assignment.Id == assignmentId && assignment.Status == AssignmentStatus.Published &&
+            assignment.DeadlineUtc >= utcNow &&
             assignment.TeachingAssignment.Course.IsActive &&
             _dbContext.CourseEnrollments.Any(enrollment => enrollment.CourseId == assignment.TeachingAssignment.CourseId &&
                 enrollment.StudentId == studentId && enrollment.IsActive), cancellationToken);
 
-    public Task<bool> CanStudentResubmitAsync(Guid assignmentId, Guid studentId,
+    public Task<bool> CanStudentResubmitAsync(Guid assignmentId, Guid studentId, DateTimeOffset utcNow,
         CancellationToken cancellationToken = default) => _dbContext.Assignments.AnyAsync(assignment =>
             assignment.Id == assignmentId && assignment.Status == AssignmentStatus.Published &&
+            assignment.DeadlineUtc >= utcNow &&
             assignment.AllowResubmission && assignment.TeachingAssignment.Course.IsActive &&
             _dbContext.CourseEnrollments.Any(enrollment => enrollment.CourseId == assignment.TeachingAssignment.CourseId &&
                 enrollment.StudentId == studentId && enrollment.IsActive), cancellationToken);

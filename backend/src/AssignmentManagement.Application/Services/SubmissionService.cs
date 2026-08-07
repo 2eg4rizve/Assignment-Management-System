@@ -53,11 +53,12 @@ public sealed class SubmissionService(ISubmissionRepository repository, IUnitOfW
         CancellationToken cancellationToken = default)
     {
         var studentId = RequireStudent();
-        if (!await repository.CanStudentSubmitAsync(assignmentId, studentId, cancellationToken))
-            throw new ForbiddenAccessException("The assignment is unavailable or the student is not actively enrolled.");
+        var now = dateTimeProvider.UtcNow;
+        if (!await repository.CanStudentSubmitAsync(assignmentId, studentId, now, cancellationToken))
+            throw new ForbiddenAccessException(
+                "The assignment is unavailable, its deadline has passed, or the student is not actively enrolled.");
         if (await repository.GetByAssignmentAndStudentAsync(assignmentId, studentId, cancellationToken) is not null)
             throw new ConflictException("A submission already exists for this assignment. Update it instead.");
-        var now = dateTimeProvider.UtcNow;
         var submission = new Submission(assignmentId, studentId, request.AnswerText, now)
         { CreatedAtUtc = now, CreatedBy = studentId };
         await repository.AddAsync(submission, cancellationToken);
@@ -72,8 +73,10 @@ public sealed class SubmissionService(ISubmissionRepository repository, IUnitOfW
         if (!await repository.IsOwnedByStudentAsync(id, studentId, cancellationToken))
             throw new ForbiddenAccessException();
         var submission = await GetEntityAsync(id, cancellationToken);
-        if (!await repository.CanStudentResubmitAsync(submission.AssignmentId, studentId, cancellationToken))
-            throw new ForbiddenAccessException("The assignment does not allow another submission.");
+        if (!await repository.CanStudentResubmitAsync(
+                submission.AssignmentId, studentId, dateTimeProvider.UtcNow, cancellationToken))
+            throw new ForbiddenAccessException(
+                "The assignment deadline has passed or another submission is not allowed.");
         repository.SetOriginalVersion(submission, DecodeVersion(request.RowVersion));
         submission.UpdateAnswer(request.AnswerText, dateTimeProvider.UtcNow);
         SetUpdatedAudit(submission);

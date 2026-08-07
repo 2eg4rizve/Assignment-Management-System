@@ -12,9 +12,9 @@ public interface ISubmissionRepository : IRepository<Submission>
     Task<SubmissionDetailReadModel?> GetDetailAsync(
         Guid id, Guid userId, bool isAdmin, bool isTeacher,
         CancellationToken cancellationToken = default);
-    Task<bool> CanStudentSubmitAsync(Guid assignmentId, Guid studentId,
+    Task<bool> CanStudentSubmitAsync(Guid assignmentId, Guid studentId, DateTimeOffset utcNow,
         CancellationToken cancellationToken = default);
-    Task<bool> CanStudentResubmitAsync(Guid assignmentId, Guid studentId,
+    Task<bool> CanStudentResubmitAsync(Guid assignmentId, Guid studentId, DateTimeOffset utcNow,
         CancellationToken cancellationToken = default);
     Task<bool> IsOwnedByStudentAsync(Guid id, Guid studentId,
         CancellationToken cancellationToken = default);
