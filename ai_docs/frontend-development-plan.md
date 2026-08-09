@@ -562,12 +562,12 @@ Module complete when a fresh clone can install dependencies and run the empty ap
 
 Dependencies: M01. Can progress in parallel with M03 after M01.
 
-- [ ] Define design tokens for color, typography, spacing, radius, and elevation.
-- [ ] Build accessible Button, Input, Select, Dialog, Table, Badge, and feedback primitives.
-- [ ] Build `AppShell`, responsive sidebar, top bar, page header, and mobile navigation.
-- [ ] Build loading, empty, error, unauthorized, and confirmation states.
-- [ ] Add reusable pagination, filter bar, search input, and status badge patterns.
-- [ ] Test keyboard navigation, focus behavior, and representative mobile layouts.
+- [x] Define design tokens for color, typography, spacing, radius, and elevation.
+- [x] Build accessible Button, Input, Select, Dialog, Table, Badge, and feedback primitives.
+- [x] Build `AppShell`, responsive sidebar, top bar, page header, and mobile navigation.
+- [x] Build loading, empty, error, unauthorized, and confirmation states.
+- [x] Add reusable pagination, filter bar, search input, and status badge patterns.
+- [x] Test keyboard navigation, focus behavior, and representative mobile layouts.
 
 Module complete when feature screens can be composed without inventing new layout or feedback patterns.
 
