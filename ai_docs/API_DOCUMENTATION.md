@@ -20,6 +20,25 @@ http://localhost:5096/openapi/v1.json
 
 The backend does not currently configure CORS. A frontend running on another origin should use a same-origin development proxy, or CORS must be added to the backend.
 
+### Local development startup
+
+Run the API from `backend/src/AssignmentManagement.Api` so that the development settings are loaded from the correct content root. Do not commit a local PostgreSQL password. Override the connection string for the current terminal instead:
+
+```powershell
+$env:ConnectionStrings__DefaultConnection='Host=localhost;Port=5432;Database=assignment_management_dev;Username=postgres;Password=<your-postgres-password>'
+dotnet run --launch-profile http
+```
+
+Before starting frontend integration, verify:
+
+```text
+GET http://localhost:5096/health
+```
+
+A `200 OK` response confirms that the API started successfully. The development startup applies pending migrations and idempotently seeds the demo accounts and academic data.
+
+Course and Subject list, detail, create, update, and delete operations have been verified against the local PostgreSQL development database. Temporary verification records are removed after testing.
+
 ## Demo accounts
 
 | Role | Email | Password |

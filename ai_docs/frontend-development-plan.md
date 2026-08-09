@@ -29,6 +29,14 @@ This plan uses practical clean architecture. It adds boundaries where they provi
 
 Use the current stable versions selected when the frontend is created. Commit the lock file and do not mix several UI component systems.
 
+### Backend readiness
+
+The backend and PostgreSQL development database are ready for frontend integration. Authentication, current-user lookup, and Course and Subject CRUD have been verified through the running HTTP API.
+
+Before starting the frontend, run the API from `backend/src/AssignmentManagement.Api` and confirm that `http://localhost:5096/health` returns `200 OK`. Supply the local PostgreSQL password through `ConnectionStrings__DefaultConnection`; do not place it in frontend environment files or commit it.
+
+The backend does not currently configure CORS. Use the backend-for-frontend approach described in this plan: Next.js route handlers or server actions call `API_BASE_URL`, and browser code calls the same-origin Next.js endpoints. Direct browser calls to port `5096` require a separate, explicitly scoped backend CORS change.
+
 ## 3. Architecture
 
 ### Dependency direction
@@ -511,14 +519,15 @@ Exit condition: development server, lint, type-check, tests, and production buil
 2. Implement the HTTP client and refresh-token flow.
 3. Implement login, logout, current user, protected layout, and role redirects.
 4. Build the role-aware application shell and navigation.
+5. Add a startup health check or developer-facing error that clearly reports when the API at `API_BASE_URL` is unavailable.
 
-Exit condition: all demo roles can log in, refresh a session, log out, and reach only suitable navigation and routes.
+Exit condition: the API health check succeeds; all demo roles can log in, refresh a session, log out, and reach only suitable navigation and routes.
 
 ### Phase 3: Shared application patterns
 
 1. Build loading, empty, error, status, confirmation, pagination, and filter components.
 2. Establish query keys and URL-based list state.
-3. Establish the standard feature layout using one simple feature first.
+3. Establish the standard feature layout with Courses or Subjects first; both CRUD contracts are verified against PostgreSQL.
 
 Exit condition: one list/create/edit feature demonstrates the pattern used by the rest of the application.
 
