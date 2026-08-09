@@ -6,6 +6,7 @@ This document is the implementation plan for the Assignment Management System fr
 
 The main goals are:
 
+- Keep all frontend application code inside the top-level `frontend/` directory; do not mix frontend files into `backend/`.
 - Keep the code easy to find, understand, test, and change.
 - Organize business code by feature instead of by file type alone.
 - Keep API, authentication, UI, and business rules separate.
@@ -501,80 +502,196 @@ NEXT_PUBLIC_APP_NAME=Assignment Management System
 
 Validate configuration in `src/shared/config/env.ts` and fail early with a useful message when required values are missing.
 
-## 20. Implementation Phases
+## 20. Dependency-Ordered Module Checklist
 
-### Phase 1: Project foundation
+This checklist is the source of truth for frontend progress. Work on one module at a time unless two items are explicitly independent. Do not mark an item complete merely because files exist.
 
-1. Create the Next.js TypeScript application under `frontend`.
-2. Enable strict TypeScript, ESLint, formatting, and import aliases.
-3. Configure Tailwind CSS and one UI component system.
-4. Add environment validation and `.env.example`.
-5. Add root layout, providers, global error page, and basic test setup.
+Checklist rules:
 
-Exit condition: development server, lint, type-check, tests, and production build pass.
+- `[ ]` means not verified.
+- `[x]` means implemented and all checks listed for that item passed.
+- Complete dependencies before starting a dependent module.
+- Update this document in the same change that completes a checklist item.
+- Record a short note under an item when work is intentionally deferred or blocked.
+- Do not mark a module complete while lint, type-check, relevant tests, or production build are failing.
 
-### Phase 2: API and authentication
+### Dependency map
 
-1. Implement shared API types and Problem Details parsing.
-2. Implement the HTTP client and refresh-token flow.
-3. Implement login, logout, current user, protected layout, and role redirects.
-4. Build the role-aware application shell and navigation.
-5. Add a startup health check or developer-facing error that clearly reports when the API at `API_BASE_URL` is unavailable.
+```text
+M00 Repository boundary
+  -> M01 Next.js foundation
+    -> M02 Shared UI and application shell
+    -> M03 API client and contracts
+      -> M04 Authentication and authorization
+        -> M05 Admin academic setup
+          -> M06 Teaching assignments and enrollments
+            -> M07 Assignment lifecycle
+              -> M08 Student submissions
+                -> M09 Teacher review and grading
+                  -> M10 Dashboards
+                    -> M11 End-to-end quality and delivery
+```
 
-Exit condition: the API health check succeeds; all demo roles can log in, refresh a session, log out, and reach only suitable navigation and routes.
+### M00 — Frontend repository boundary
 
-### Phase 3: Shared application patterns
+Dependencies: none.
 
-1. Build loading, empty, error, status, confirmation, pagination, and filter components.
-2. Establish query keys and URL-based list state.
-3. Establish the standard feature layout with Courses or Subjects first; both CRUD contracts are verified against PostgreSQL.
+- [ ] Keep the application in the top-level `frontend/` directory.
+- [ ] Confirm that frontend source, tests, configuration, and assets do not leak into `backend/`.
+- [ ] Add a frontend-specific `.gitignore` only when the root ignore rules do not cover generated files.
+- [ ] Document the Node.js and package-manager requirements.
 
-Exit condition: one list/create/edit feature demonstrates the pattern used by the rest of the application.
+Module complete when the directory boundary and development prerequisites are clear without creating unused placeholder folders.
 
-### Phase 4: Admin features
+### M01 — Next.js foundation
 
-Implement in dependency order:
+Dependencies: M00.
 
-1. Users
-2. Courses
-3. Subjects
-4. Teaching assignments
-5. Enrollments
-6. Admin assignment and submission views
-7. Admin dashboard
+- [ ] Create a Next.js App Router project with TypeScript under `frontend/`.
+- [ ] Enable strict TypeScript, ESLint, formatting, and the `@/` import alias.
+- [ ] Configure Tailwind CSS and exactly one component system.
+- [ ] Add environment validation and a safe `.env.example`.
+- [ ] Add root layout, global styles, providers, `not-found`, and global error handling.
+- [ ] Add Vitest, React Testing Library, and Playwright foundations.
+- [ ] Verify development server startup.
+- [ ] Verify lint, type-check, unit tests, and production build.
 
-Exit condition: Admin can prepare all data required for Teacher and Student workflows.
+Module complete when a fresh clone can install dependencies and run the empty application using documented commands.
 
-### Phase 5: Teacher features
+### M02 — Shared UI and application shell
 
-1. Teacher dashboard
-2. Assignment list and details
-3. Create and edit assignment
-4. Publish, close, and delete actions
-5. Submission list and detail
-6. Review, return, and grading forms
+Dependencies: M01. Can progress in parallel with M03 after M01.
 
-Exit condition: Teacher can complete the assignment lifecycle and publish a grade.
+- [ ] Define design tokens for color, typography, spacing, radius, and elevation.
+- [ ] Build accessible Button, Input, Select, Dialog, Table, Badge, and feedback primitives.
+- [ ] Build `AppShell`, responsive sidebar, top bar, page header, and mobile navigation.
+- [ ] Build loading, empty, error, unauthorized, and confirmation states.
+- [ ] Add reusable pagination, filter bar, search input, and status badge patterns.
+- [ ] Test keyboard navigation, focus behavior, and representative mobile layouts.
 
-### Phase 6: Student features
+Module complete when feature screens can be composed without inventing new layout or feedback patterns.
 
-1. Student dashboard
-2. Visible assignment list and detail
-3. Submit and allowed-resubmit flows
-4. Submission history and detail
-5. Published feedback and grade display
+### M03 — API client and shared contracts
 
-Exit condition: Student can complete the full submission workflow without using Swagger.
+Dependencies: M01. Can progress in parallel with M02 after M01.
 
-### Phase 7: Quality and delivery
+- [ ] Add server-only `API_BASE_URL` validation.
+- [ ] Implement the shared HTTP client with JSON and `204 No Content` handling.
+- [ ] Parse RFC 7807 `ProblemDetails` and preserve `traceId`.
+- [ ] Define pagination, role, status, and shared API types.
+- [ ] Support `AbortSignal`, request timeouts, and one controlled retry where appropriate.
+- [ ] Add an API health check with a clear developer-facing failure message.
+- [ ] Unit-test response parsing and error mapping.
 
-1. Complete responsive and accessibility review.
-2. Add component and end-to-end tests.
-3. Verify session expiry, error, empty, and concurrency behavior.
-4. Run lint, type-check, tests, and production build.
-5. Document setup, commands, demo accounts, and known limitations.
+Module complete when typed requests can reach the backend through Next.js server code without direct browser CORS dependency.
 
-Exit condition: a new developer can clone, configure, run, and understand the frontend using repository documentation.
+### M04 — Authentication and authorization
+
+Dependencies: M02 and M03.
+
+- [ ] Implement same-origin login through a Next.js route handler or server action.
+- [ ] Store access and refresh tokens in Secure, HttpOnly, SameSite cookies.
+- [ ] Implement current-user lookup, token refresh with rotation, and one safe retry.
+- [ ] Implement logout and reliable cookie cleanup.
+- [ ] Add protected layouts, role redirects, and the unauthorized page.
+- [ ] Generate navigation from authenticated roles.
+- [ ] Verify Admin, Teacher, and Student demo logins.
+- [ ] Test expired session, invalid credentials, `401`, and `403` behavior.
+
+Module complete when every demo role can log in, refresh, navigate only to appropriate sections, and log out without exposing tokens to browser JavaScript.
+
+### M05 — Admin users, courses, and subjects
+
+Dependencies: M04.
+
+- [ ] Implement user list, filters, create/edit, activation, role assignment, and password reset.
+- [ ] Implement Course list, detail, create, edit, and delete/deactivation flows.
+- [ ] Implement Subject list, detail, create, edit, and delete/deactivation flows.
+- [ ] Use URL-backed filters and server pagination.
+- [ ] Map backend validation and conflict errors to forms.
+- [ ] Cover loading, empty, error, success, and pending states.
+- [ ] Add component tests for representative list and mutation flows.
+
+Module complete when an Admin can manage the foundational records required by all later workflows.
+
+### M06 — Teaching assignments and enrollments
+
+Dependencies: M05.
+
+- [ ] Implement teaching-assignment list, filters, create, edit, and delete/deactivation.
+- [ ] Implement enrollment list, filters, create, edit, and delete/deactivation.
+- [ ] Load Course, Subject, Teacher, and Student options through typed queries.
+- [ ] Prevent duplicate submissions in the UI while treating the API as authoritative.
+- [ ] Test dependency loading, conflicts, empty states, and successful mutations.
+
+Module complete when an Admin can connect teachers and students to the academic setup needed for assignments.
+
+### M07 — Teacher assignment lifecycle
+
+Dependencies: M06.
+
+- [ ] Implement Teacher assignment list and detail screens.
+- [ ] Implement create and edit forms with deadline and marks validation.
+- [ ] Implement publish, close, and draft-delete actions.
+- [ ] Carry the latest `rowVersion` through every concurrent mutation.
+- [ ] Show clear `409 Conflict` recovery and record reload behavior.
+- [ ] Add Admin read-only assignment views.
+- [ ] Test draft, published, closed, forbidden, and stale-version states.
+
+Module complete when a Teacher can manage the complete assignment lifecycle without Swagger.
+
+### M08 — Student assignment and submission workflow
+
+Dependencies: M07.
+
+- [ ] Implement visible assignment list and detail screens.
+- [ ] Implement initial submission and allowed resubmission.
+- [ ] Implement own submission history and detail.
+- [ ] Display deadlines in local time with timezone context.
+- [ ] Handle closed, overdue, not-enrolled, and resubmission-disabled states.
+- [ ] Test submission success, validation failure, forbidden access, and deadline behavior.
+
+Module complete when a Student can discover and submit eligible assignments end to end.
+
+### M09 — Teacher review and grading
+
+Dependencies: M08.
+
+- [ ] Implement submission list, filters, and detail.
+- [ ] Implement under-review, return, grade, and feedback actions.
+- [ ] Validate awarded marks against assignment maximum marks.
+- [ ] Use the latest submission `rowVersion` for concurrent actions.
+- [ ] Add Admin read-only submission views.
+- [ ] Test ownership, invalid marks, stale versions, and successful grading.
+
+Module complete when a Teacher can review a submission and publish a valid grade and feedback.
+
+### M10 — Role dashboards
+
+Dependencies: M05 for Admin, M07 for Teacher, and M09 for Student completion metrics.
+
+- [ ] Implement Admin dashboard summary cards and navigation targets.
+- [ ] Implement Teacher dashboard workload and review summaries.
+- [ ] Implement Student dashboard open, due-soon, submitted, and graded summaries.
+- [ ] Handle loading, zero-data, partial failure, and responsive layouts.
+- [ ] Verify dashboard values against the corresponding list endpoints.
+
+Module complete when each role sees accurate, actionable summaries linked to implemented workflows.
+
+### M11 — End-to-end quality and delivery
+
+Dependencies: M01–M10.
+
+- [ ] Automate the Admin academic-setup workflow in Playwright.
+- [ ] Automate Teacher create/publish and Student submit workflows.
+- [ ] Automate Teacher grade and Student feedback visibility.
+- [ ] Verify cross-role route and API access denial.
+- [ ] Complete responsive, keyboard, screen-reader, and WCAG AA review.
+- [ ] Verify session expiry, network failure, empty, error, and concurrency states.
+- [ ] Run lint, type-check, unit/component tests, end-to-end tests, and production build.
+- [ ] Document setup, commands, environment variables, demo accounts, and known limitations.
+
+Module complete when a new developer can clone, configure, run, test, and understand the frontend and the complete role workflow passes without manual database edits.
 
 ## 21. Definition of Done
 
