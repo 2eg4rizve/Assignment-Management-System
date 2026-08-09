@@ -536,10 +536,10 @@ M00 Repository boundary
 
 Dependencies: none.
 
-- [ ] Keep the application in the top-level `frontend/` directory.
-- [ ] Confirm that frontend source, tests, configuration, and assets do not leak into `backend/`.
-- [ ] Add a frontend-specific `.gitignore` only when the root ignore rules do not cover generated files.
-- [ ] Document the Node.js and package-manager requirements.
+- [x] Keep the application in the top-level `frontend/` directory.
+- [x] Confirm that frontend source, tests, configuration, and assets do not leak into `backend/`.
+- [x] Add a frontend-specific `.gitignore` only when the root ignore rules do not cover generated files.
+- [x] Document the Node.js and package-manager requirements.
 
 Module complete when the directory boundary and development prerequisites are clear without creating unused placeholder folders.
 
@@ -547,14 +547,14 @@ Module complete when the directory boundary and development prerequisites are cl
 
 Dependencies: M00.
 
-- [ ] Create a Next.js App Router project with TypeScript under `frontend/`.
-- [ ] Enable strict TypeScript, ESLint, formatting, and the `@/` import alias.
-- [ ] Configure Tailwind CSS and exactly one component system.
-- [ ] Add environment validation and a safe `.env.example`.
-- [ ] Add root layout, global styles, providers, `not-found`, and global error handling.
-- [ ] Add Vitest, React Testing Library, and Playwright foundations.
-- [ ] Verify development server startup.
-- [ ] Verify lint, type-check, unit tests, and production build.
+- [x] Create a Next.js App Router project with TypeScript under `frontend/`.
+- [x] Enable strict TypeScript, ESLint, formatting, and the `@/` import alias.
+- [x] Configure Tailwind CSS and exactly one component system.
+- [x] Add environment validation and a safe `.env.example`.
+- [x] Add root layout, global styles, providers, `not-found`, and global error handling.
+- [x] Add Vitest, React Testing Library, and Playwright foundations.
+- [x] Verify development server startup.
+- [x] Verify lint, type-check, unit tests, and production build.
 
 Module complete when a fresh clone can install dependencies and run the empty application using documented commands.
 
