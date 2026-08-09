@@ -604,7 +604,7 @@ Module complete when every demo role can log in, refresh, navigate only to appro
 
 Dependencies: M04.
 
-- [ ] Implement user list, filters, create/edit, activation, role assignment, and password reset.
+- [x] Implement user list, filters, create/edit, activation, role assignment, and password reset.
 - [ ] Implement Course list, detail, create, edit, and delete/deactivation flows.
 - [ ] Implement Subject list, detail, create, edit, and delete/deactivation flows.
 - [ ] Use URL-backed filters and server pagination.

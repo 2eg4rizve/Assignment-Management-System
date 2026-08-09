@@ -1,7 +1,7 @@
 import "server-only";
 
 import { ApiError } from "@/shared/api/api-error";
-import { apiRequest } from "@/shared/api/api-client";
+import { apiRequest, type ApiRequestOptions } from "@/shared/api/api-client";
 
 import type { AuthResponse, CurrentUser } from "../auth.types";
 
@@ -122,4 +122,44 @@ export async function getCurrentUserWithRefresh(
 
     throw error;
   }
+}
+
+export async function authenticatedApiRequest<T>(
+  cookieStore: SessionCookieStore,
+  path: string,
+  options: ApiRequestOptions = {},
+  request: AuthRequest = apiRequest,
+): Promise<T> {
+  let accessToken = cookieStore.get(accessTokenCookieName)?.value;
+  if (!accessToken) {
+    const refreshed = await refreshSession(cookieStore, request);
+    accessToken = refreshed?.accessToken;
+  }
+
+  if (!accessToken) {
+    throw new ApiError("Your session has expired.", { status: 401 });
+  }
+
+  try {
+    return await request<T>(path, {
+      ...options,
+      accessToken,
+      retry: false,
+    });
+  } catch (error) {
+    if (!(error instanceof ApiError) || error.status !== 401) {
+      throw error;
+    }
+  }
+
+  const refreshed = await refreshSession(cookieStore, request);
+  if (!refreshed) {
+    throw new ApiError("Your session has expired.", { status: 401 });
+  }
+
+  return request<T>(path, {
+    ...options,
+    accessToken: refreshed.accessToken,
+    retry: false,
+  });
 }

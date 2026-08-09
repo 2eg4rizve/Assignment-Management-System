@@ -5,6 +5,7 @@ import { ApiError } from "@/shared/api/api-error";
 import type { AuthResponse, CurrentUser } from "../auth.types";
 import {
   accessTokenCookieName,
+  authenticatedApiRequest,
   getCurrentUserWithRefresh,
   refreshTokenCookieName,
   writeSession,
@@ -123,5 +124,22 @@ describe("authenticated session", () => {
     await expect(getCurrentUserWithRefresh(store, request)).rejects.toBe(
       forbidden,
     );
+  });
+
+  it("refreshes and retries an authenticated feature request once", async () => {
+    const { store } = createCookieStore({
+      [accessTokenCookieName]: "expired-access-token",
+      [refreshTokenCookieName]: "refresh-token",
+    });
+    const request = vi
+      .fn()
+      .mockRejectedValueOnce(new ApiError("Expired", { status: 401 }))
+      .mockResolvedValueOnce(refreshedAuth)
+      .mockResolvedValueOnce({ items: [] });
+
+    await expect(
+      authenticatedApiRequest(store, "users", {}, request),
+    ).resolves.toEqual({ items: [] });
+    expect(request).toHaveBeenCalledTimes(3);
   });
 });
