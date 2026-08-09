@@ -575,13 +575,13 @@ Module complete when feature screens can be composed without inventing new layou
 
 Dependencies: M01. Can progress in parallel with M02 after M01.
 
-- [ ] Add server-only `API_BASE_URL` validation.
-- [ ] Implement the shared HTTP client with JSON and `204 No Content` handling.
-- [ ] Parse RFC 7807 `ProblemDetails` and preserve `traceId`.
-- [ ] Define pagination, role, status, and shared API types.
-- [ ] Support `AbortSignal`, request timeouts, and one controlled retry where appropriate.
-- [ ] Add an API health check with a clear developer-facing failure message.
-- [ ] Unit-test response parsing and error mapping.
+- [x] Add server-only `API_BASE_URL` validation.
+- [x] Implement the shared HTTP client with JSON and `204 No Content` handling.
+- [x] Parse RFC 7807 `ProblemDetails` and preserve `traceId`.
+- [x] Define pagination, role, status, and shared API types.
+- [x] Support `AbortSignal`, request timeouts, and one controlled retry where appropriate.
+- [x] Add an API health check with a clear developer-facing failure message.
+- [x] Unit-test response parsing and error mapping.
 
 Module complete when typed requests can reach the backend through Next.js server code without direct browser CORS dependency.
 
@@ -589,14 +589,14 @@ Module complete when typed requests can reach the backend through Next.js server
 
 Dependencies: M02 and M03.
 
-- [ ] Implement same-origin login through a Next.js route handler or server action.
-- [ ] Store access and refresh tokens in Secure, HttpOnly, SameSite cookies.
-- [ ] Implement current-user lookup, token refresh with rotation, and one safe retry.
-- [ ] Implement logout and reliable cookie cleanup.
-- [ ] Add protected layouts, role redirects, and the unauthorized page.
-- [ ] Generate navigation from authenticated roles.
-- [ ] Verify Admin, Teacher, and Student demo logins.
-- [ ] Test expired session, invalid credentials, `401`, and `403` behavior.
+- [x] Implement same-origin login through a Next.js route handler or server action.
+- [x] Store access and refresh tokens in Secure, HttpOnly, SameSite cookies.
+- [x] Implement current-user lookup, token refresh with rotation, and one safe retry.
+- [x] Implement logout and reliable cookie cleanup.
+- [x] Add protected layouts, role redirects, and the unauthorized page.
+- [x] Generate navigation from authenticated roles.
+- [x] Verify Admin, Teacher, and Student demo logins.
+- [x] Test expired session, invalid credentials, `401`, and `403` behavior.
 
 Module complete when every demo role can log in, refresh, navigate only to appropriate sections, and log out without exposing tokens to browser JavaScript.
 
