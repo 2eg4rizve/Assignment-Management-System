@@ -34,8 +34,12 @@ public sealed class CourseRepository : Repository<Course>, ICourseRepository
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        return await Project(_dbContext.Courses.AsNoTracking())
-            .SingleOrDefaultAsync(course => course.Id == id, cancellationToken);
+        var query = _dbContext.Courses
+            .AsNoTracking()
+            .Where(course => course.Id == id);
+
+        return await Project(query)
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
     public async Task<(IReadOnlyCollection<CourseReadModel> Items, int TotalCount)> GetPagedAsync(
@@ -65,11 +69,13 @@ public sealed class CourseRepository : Repository<Course>, ICourseRepository
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var items = await Project(query)
+        var pageQuery = query
             .OrderBy(course => course.Name)
             .ThenBy(course => course.Code)
             .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
+            .Take(request.PageSize);
+
+        var items = await Project(pageQuery)
             .ToListAsync(cancellationToken);
 
         return (items, totalCount);

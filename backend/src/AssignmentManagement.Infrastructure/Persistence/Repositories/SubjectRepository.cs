@@ -34,8 +34,12 @@ public sealed class SubjectRepository : Repository<Subject>, ISubjectRepository
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        return await Project(_dbContext.Subjects.AsNoTracking())
-            .SingleOrDefaultAsync(subject => subject.Id == id, cancellationToken);
+        var query = _dbContext.Subjects
+            .AsNoTracking()
+            .Where(subject => subject.Id == id);
+
+        return await Project(query)
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
     public async Task<(IReadOnlyCollection<SubjectReadModel> Items, int TotalCount)> GetPagedAsync(
@@ -59,11 +63,13 @@ public sealed class SubjectRepository : Repository<Subject>, ISubjectRepository
 
         var totalCount = await query.CountAsync(cancellationToken);
 
-        var items = await Project(query)
+        var pageQuery = query
             .OrderBy(subject => subject.Name)
             .ThenBy(subject => subject.Code)
             .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
+            .Take(request.PageSize);
+
+        var items = await Project(pageQuery)
             .ToListAsync(cancellationToken);
 
         return (items, totalCount);
