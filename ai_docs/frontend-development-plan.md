@@ -619,10 +619,11 @@ Module complete when an Admin can manage the foundational records required by al
 Dependencies: M05.
 
 - [x] Implement teaching-assignment list, filters, create, edit, and delete/deactivation.
-- [ ] Implement enrollment list, filters, create, edit, and delete/deactivation.
-- [ ] Load Course, Subject, Teacher, and Student options through typed queries.
-- [ ] Prevent duplicate submissions in the UI while treating the API as authoritative.
-- [ ] Test dependency loading, conflicts, empty states, and successful mutations.
+- [x] Implement enrollment list, filters, create, and delete/deactivation.
+  - The backend exposes no enrollment update endpoint; changing an enrollment requires deactivation and creation of the intended student-course pair.
+- [x] Load Course, Subject, Teacher, and Student options through typed queries.
+- [x] Prevent duplicate submissions in the UI while treating the API as authoritative.
+- [x] Test dependency loading, conflicts, empty states, and successful mutations.
 
 Module complete when an Admin can connect teachers and students to the academic setup needed for assignments.
 
