@@ -1,5 +1,5 @@
-import { RoleDashboard } from "@/features/auth/components/role-dashboard";
+import { TeacherDashboardPage } from "@/features/dashboards/components/teacher-dashboard-page";
 
-export default function TeacherDashboardPage() {
-  return <RoleDashboard role="Teacher" />;
+export default function TeacherDashboardRoute() {
+  return <TeacherDashboardPage />;
 }

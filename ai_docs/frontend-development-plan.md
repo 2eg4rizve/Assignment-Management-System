@@ -671,11 +671,11 @@ Module complete when a Teacher can review a submission and publish a valid grade
 
 Dependencies: M05 for Admin, M07 for Teacher, and M09 for Student completion metrics.
 
-- [ ] Implement Admin dashboard summary cards and navigation targets.
-- [ ] Implement Teacher dashboard workload and review summaries.
-- [ ] Implement Student dashboard open, due-soon, submitted, and graded summaries.
-- [ ] Handle loading, zero-data, partial failure, and responsive layouts.
-- [ ] Verify dashboard values against the corresponding list endpoints.
+- [x] Implement Admin dashboard summary cards and navigation targets.
+- [x] Implement Teacher dashboard workload and review summaries.
+- [x] Implement Student dashboard open, due-soon, submitted, and graded summaries.
+- [x] Handle loading, zero-data, partial failure, and responsive layouts.
+- [x] Verify dashboard values against the corresponding list endpoints.
 
 Module complete when each role sees accurate, actionable summaries linked to implemented workflows.
 
