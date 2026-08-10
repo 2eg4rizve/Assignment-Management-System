@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>AssignmentManagement.Api-4f7fbe65-f623-4af7-bd40-676744208572</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
