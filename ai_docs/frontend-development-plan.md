@@ -607,10 +607,10 @@ Dependencies: M04.
 - [x] Implement user list, filters, create/edit, activation, role assignment, and password reset.
 - [x] Implement Course list, detail, create, edit, and delete/deactivation flows.
 - [x] Implement Subject list, detail, create, edit, and delete/deactivation flows.
-- [ ] Use URL-backed filters and server pagination.
-- [ ] Map backend validation and conflict errors to forms.
-- [ ] Cover loading, empty, error, success, and pending states.
-- [ ] Add component tests for representative list and mutation flows.
+- [x] Use URL-backed filters and server pagination.
+- [x] Map backend validation and conflict errors to forms.
+- [x] Cover loading, empty, error, success, and pending states.
+- [x] Add component tests for representative list and mutation flows.
 
 Module complete when an Admin can manage the foundational records required by all later workflows.
 
@@ -618,7 +618,7 @@ Module complete when an Admin can manage the foundational records required by al
 
 Dependencies: M05.
 
-- [ ] Implement teaching-assignment list, filters, create, edit, and delete/deactivation.
+- [x] Implement teaching-assignment list, filters, create, edit, and delete/deactivation.
 - [ ] Implement enrollment list, filters, create, edit, and delete/deactivation.
 - [ ] Load Course, Subject, Teacher, and Student options through typed queries.
 - [ ] Prevent duplicate submissions in the UI while treating the API as authoritative.
