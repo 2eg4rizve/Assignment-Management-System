@@ -20,6 +20,7 @@ const navigationByRole: Record<UserRole, readonly NavigationItem[]> = {
     { href: "/admin/courses", icon: GraduationCap, label: "Courses" },
     { href: "/admin/subjects", icon: Library, label: "Subjects" },
     { href: "/admin/assignments", icon: FileText, label: "Assignments" },
+    { href: "/admin/submissions", icon: ClipboardCheck, label: "Submissions" },
     {
       href: "/admin/teaching-assignments",
       icon: UserCheck,

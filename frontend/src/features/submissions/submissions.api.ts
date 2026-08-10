@@ -1,6 +1,7 @@
 import { browserRequest } from "@/shared/api/browser-client";
 import type { PagedResponse } from "@/shared/api/contracts";
 import type {
+  GradeSubmissionInput,
   SubmissionDetail,
   SubmissionFilters,
   SubmissionListItem,
@@ -17,6 +18,20 @@ export function getMySubmissions(filters: SubmissionFilters) {
   if (filters.sortDirection) query.set("sortDirection", filters.sortDirection);
   return browserRequest<PagedResponse<SubmissionListItem>>(
     `/api/my-submissions?${query}`,
+  );
+}
+export function getSubmissions(filters: SubmissionFilters) {
+  const query = new URLSearchParams({
+    pageNumber: String(filters.pageNumber),
+    pageSize: String(filters.pageSize),
+  });
+  if (filters.search) query.set("search", filters.search);
+  if (filters.assignmentId) query.set("assignmentId", filters.assignmentId);
+  if (filters.studentId) query.set("studentId", filters.studentId);
+  if (filters.status) query.set("status", filters.status);
+  if (filters.sortDirection) query.set("sortDirection", filters.sortDirection);
+  return browserRequest<PagedResponse<SubmissionListItem>>(
+    `/api/submissions?${query}`,
   );
 }
 export function getSubmission(id: string) {
@@ -42,4 +57,20 @@ export function updateSubmission(
     `/api/assignments/${assignmentId}/submission`,
     { method: "PUT", body: JSON.stringify({ answerText, rowVersion }) },
   );
+}
+export function updateSubmissionStatus(
+  id: string,
+  status: "UnderReview" | "Returned",
+  rowVersion: string,
+) {
+  return browserRequest<SubmissionMutation>(
+    `/api/submissions/${id}/review-status`,
+    { method: "PUT", body: JSON.stringify({ status, rowVersion }) },
+  );
+}
+export function gradeSubmission(id: string, input: GradeSubmissionInput) {
+  return browserRequest<SubmissionMutation>(`/api/submissions/${id}/grade`, {
+    method: "PUT",
+    body: JSON.stringify(input),
+  });
 }

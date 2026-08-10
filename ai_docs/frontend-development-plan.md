@@ -658,12 +658,12 @@ Module complete when a Student can discover and submit eligible assignments end 
 
 Dependencies: M08.
 
-- [ ] Implement submission list, filters, and detail.
-- [ ] Implement under-review, return, grade, and feedback actions.
-- [ ] Validate awarded marks against assignment maximum marks.
-- [ ] Use the latest submission `rowVersion` for concurrent actions.
-- [ ] Add Admin read-only submission views.
-- [ ] Test ownership, invalid marks, stale versions, and successful grading.
+- [x] Implement submission list, filters, and detail.
+- [x] Implement under-review, return, grade, and feedback actions.
+- [x] Validate awarded marks against assignment maximum marks.
+- [x] Use the latest submission `rowVersion` for concurrent actions.
+- [x] Add Admin read-only submission views.
+- [x] Test ownership, invalid marks, stale versions, and successful grading.
 
 Module complete when a Teacher can review a submission and publish a valid grade and feedback.
 

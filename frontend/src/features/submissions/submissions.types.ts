@@ -56,7 +56,15 @@ export type SubmissionMutation = {
 export type SubmissionFilters = {
   pageNumber: number;
   pageSize: number;
+  search?: string;
   assignmentId?: string;
+  studentId?: string;
   status?: SubmissionStatus;
   sortDirection?: "Asc" | "Desc";
+};
+export type GradeSubmissionInput = {
+  marksAwarded: number;
+  feedback?: string;
+  publishGrade: boolean;
+  rowVersion: string;
 };

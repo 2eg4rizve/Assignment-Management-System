@@ -1,6 +1,6 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Edit, Send, Square } from "lucide-react";
+import { ArrowLeft, ClipboardCheck, Edit, Send, Square } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ApiError } from "@/shared/api/api-error";
@@ -79,6 +79,12 @@ export function TeacherAssignmentDetailPage({ id }: { id: string }) {
               label={query.data.status}
               status={query.data.status.toLowerCase()}
             />
+            <Button asChild variant="outline">
+              <Link href={`/teacher/assignments/${id}/submissions`}>
+                <ClipboardCheck aria-hidden="true" />
+                Submissions
+              </Link>
+            </Button>
             {actions.canEdit ? (
               <Button asChild variant="outline">
                 <Link href={`/teacher/assignments/${id}/edit`}>
