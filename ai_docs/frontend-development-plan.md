@@ -606,7 +606,7 @@ Dependencies: M04.
 
 - [x] Implement user list, filters, create/edit, activation, role assignment, and password reset.
 - [x] Implement Course list, detail, create, edit, and delete/deactivation flows.
-- [ ] Implement Subject list, detail, create, edit, and delete/deactivation flows.
+- [x] Implement Subject list, detail, create, edit, and delete/deactivation flows.
 - [ ] Use URL-backed filters and server pagination.
 - [ ] Map backend validation and conflict errors to forms.
 - [ ] Cover loading, empty, error, success, and pending states.
