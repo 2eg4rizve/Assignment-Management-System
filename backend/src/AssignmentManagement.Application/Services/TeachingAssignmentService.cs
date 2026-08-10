@@ -26,6 +26,18 @@ public sealed class TeachingAssignmentService(
             responses, request.PageNumber, request.PageSize, totalCount);
     }
 
+    public Task<PagedResponse<TeachingAssignmentResponse>> GetCurrentTeacherPagedAsync(
+        TeachingAssignmentQueryRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var teacherId = currentUserService.UserId
+            ?? throw new ForbiddenAccessException("An authenticated teacher is required.");
+        if (!currentUserService.IsInRole("Teacher"))
+            throw new ForbiddenAccessException("A teacher account is required.");
+
+        return GetPagedAsync(request with { TeacherId = teacherId }, cancellationToken);
+    }
+
     public async Task<TeachingAssignmentResponse> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default)

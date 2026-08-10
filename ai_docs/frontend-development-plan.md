@@ -631,11 +631,11 @@ Module complete when an Admin can connect teachers and students to the academic 
 
 Dependencies: M06.
 
-- [ ] Implement Teacher assignment list and detail screens.
-- [ ] Implement create and edit forms with deadline and marks validation.
-- [ ] Implement publish, close, and draft-delete actions.
-- [ ] Carry the latest `rowVersion` through every concurrent mutation.
-- [ ] Show clear `409 Conflict` recovery and record reload behavior.
+- [x] Implement Teacher assignment list and detail screens.
+- [x] Implement create and edit forms with deadline and marks validation.
+- [x] Implement publish, close, and draft-delete actions.
+- [x] Carry the latest `rowVersion` through every concurrent mutation.
+- [x] Show clear `409 Conflict` recovery and record reload behavior.
 - [ ] Add Admin read-only assignment views.
 - [ ] Test draft, published, closed, forbidden, and stale-version states.
 

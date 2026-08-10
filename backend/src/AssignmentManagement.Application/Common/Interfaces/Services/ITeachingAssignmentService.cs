@@ -10,6 +10,10 @@ public interface ITeachingAssignmentService
         TeachingAssignmentQueryRequest request,
         CancellationToken cancellationToken = default);
 
+    Task<PagedResponse<TeachingAssignmentResponse>> GetCurrentTeacherPagedAsync(
+        TeachingAssignmentQueryRequest request,
+        CancellationToken cancellationToken = default);
+
     Task<TeachingAssignmentResponse> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default);

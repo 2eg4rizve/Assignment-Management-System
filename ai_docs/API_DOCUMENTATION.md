@@ -350,6 +350,8 @@ Response fields: `id`, `code`, `name`, `description`, `isActive`, `createdAtUtc`
 
 ### Teaching assignments
 
+`GET /teacher/teaching-assignments` is available to Teacher accounts and returns only the current teacher's teaching assignments. It accepts the teaching-assignment list filters and is used to select a valid `teachingAssignmentId` when creating an assignment.
+
 `GET /teaching-assignments`
 
 Query: common pagination plus `search`, `teacherId`, `courseId`, `subjectId`, and `isActive`.
