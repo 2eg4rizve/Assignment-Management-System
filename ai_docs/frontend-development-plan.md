@@ -686,15 +686,15 @@ Dependencies: M01–M10.
 - [x] Automate the Admin academic-setup workflow in Playwright.
 - [x] Automate Teacher create/publish and Student submit workflows.
 - [x] Automate Teacher grade and Student feedback visibility.
-- [ ] Verify cross-role route and API access denial.
+- [x] Verify cross-role route and API access denial.
 - [ ] Complete responsive, keyboard, screen-reader, and WCAG AA review.
 - [x] Verify session expiry, network failure, empty, error, and concurrency states.
 - [x] Run lint, type-check, unit/component tests, end-to-end tests, and production build.
 - [x] Document setup, commands, environment variables, demo accounts, and known limitations.
 
 The deterministic browser workflows use same-origin API contracts. The opt-in live
-suite also verifies all seeded roles against the local PostgreSQL-backed API; full live
-mutation workflows remain a release verification step.
+suite verifies all seeded roles against the local PostgreSQL-backed API. The complete
+live setup, publish, submit, grade, and feedback workflow has also been verified.
 
 Module complete when a new developer can clone, configure, run, test, and understand the frontend and the complete role workflow passes without manual database edits.
 

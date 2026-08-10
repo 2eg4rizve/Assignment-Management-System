@@ -82,18 +82,20 @@ public sealed class CourseEnrollmentRepository : Repository<CourseEnrollment>, I
     private IQueryable<EnrollmentReadModel> Project() =>
         from item in _dbContext.CourseEnrollments.AsNoTracking()
         join student in _dbContext.Users.AsNoTracking() on item.StudentId equals student.Id
-        select new EnrollmentReadModel(
-            item.Id,
-            student.Id,
-            (student.FirstName + " " + student.LastName).Trim(),
-            student.Email ?? string.Empty,
-            item.Course.Id,
-            item.Course.Code,
-            item.Course.Name,
-            item.Course.AcademicYear,
-            item.Course.Section,
-            item.EnrolledAtUtc,
-            item.IsActive,
-            item.CreatedAtUtc,
-            item.UpdatedAtUtc);
+        select new EnrollmentReadModel
+        {
+            Id = item.Id,
+            StudentId = student.Id,
+            StudentFullName = (student.FirstName + " " + student.LastName).Trim(),
+            StudentEmail = student.Email ?? string.Empty,
+            CourseId = item.Course.Id,
+            CourseCode = item.Course.Code,
+            CourseName = item.Course.Name,
+            AcademicYear = item.Course.AcademicYear,
+            Section = item.Course.Section,
+            EnrolledAtUtc = item.EnrolledAtUtc,
+            IsActive = item.IsActive,
+            CreatedAtUtc = item.CreatedAtUtc,
+            UpdatedAtUtc = item.UpdatedAtUtc
+        };
 }

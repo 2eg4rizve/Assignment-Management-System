@@ -76,6 +76,8 @@ npm run e2e -- --grep "live seeded environment"
 
 The deterministic browser suite covers role guards, session expiry, network failures, responsive navigation, academic setup, assignment publishing, submission, grading, and feedback. The opt-in live suite verifies that every seeded role can authenticate and render its PostgreSQL-backed dashboard.
 
+From the repository root, `backend/live-workflow.ps1` runs the complete PostgreSQL-backed mutation workflow and verifies cross-role API denials. It expects the API to be running and does not store database credentials.
+
 ## Known limitations
 
 - Enrollment changes require deactivation and creation of a new student-course pair because the API has no enrollment update endpoint.

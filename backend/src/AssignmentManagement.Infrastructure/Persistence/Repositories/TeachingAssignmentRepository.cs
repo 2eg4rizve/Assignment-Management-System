@@ -94,20 +94,22 @@ public sealed class TeachingAssignmentRepository : Repository<TeachingAssignment
     private IQueryable<TeachingAssignmentReadModel> Project() =>
         from item in _dbContext.TeachingAssignments.AsNoTracking()
         join teacher in _dbContext.Users.AsNoTracking() on item.TeacherId equals teacher.Id
-        select new TeachingAssignmentReadModel(
-            item.Id,
-            teacher.Id,
-            (teacher.FirstName + " " + teacher.LastName).Trim(),
-            teacher.Email ?? string.Empty,
-            item.Course.Id,
-            item.Course.Code,
-            item.Course.Name,
-            item.Course.AcademicYear,
-            item.Course.Section,
-            item.Subject.Id,
-            item.Subject.Code,
-            item.Subject.Name,
-            item.IsActive,
-            item.CreatedAtUtc,
-            item.UpdatedAtUtc);
+        select new TeachingAssignmentReadModel
+        {
+            Id = item.Id,
+            TeacherId = teacher.Id,
+            TeacherFullName = (teacher.FirstName + " " + teacher.LastName).Trim(),
+            TeacherEmail = teacher.Email ?? string.Empty,
+            CourseId = item.Course.Id,
+            CourseCode = item.Course.Code,
+            CourseName = item.Course.Name,
+            AcademicYear = item.Course.AcademicYear,
+            Section = item.Course.Section,
+            SubjectId = item.Subject.Id,
+            SubjectCode = item.Subject.Code,
+            SubjectName = item.Subject.Name,
+            IsActive = item.IsActive,
+            CreatedAtUtc = item.CreatedAtUtc,
+            UpdatedAtUtc = item.UpdatedAtUtc
+        };
 }
