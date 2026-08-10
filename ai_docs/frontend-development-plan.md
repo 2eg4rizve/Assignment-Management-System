@@ -645,12 +645,12 @@ Module complete when a Teacher can manage the complete assignment lifecycle with
 
 Dependencies: M07.
 
-- [ ] Implement visible assignment list and detail screens.
-- [ ] Implement initial submission and allowed resubmission.
-- [ ] Implement own submission history and detail.
-- [ ] Display deadlines in local time with timezone context.
-- [ ] Handle closed, overdue, not-enrolled, and resubmission-disabled states.
-- [ ] Test submission success, validation failure, forbidden access, and deadline behavior.
+- [x] Implement visible assignment list and detail screens.
+- [x] Implement initial submission and allowed resubmission.
+- [x] Implement own submission history and detail.
+- [x] Display deadlines in local time with timezone context.
+- [x] Handle closed, overdue, not-enrolled, and resubmission-disabled states.
+- [x] Test submission success, validation failure, forbidden access, and deadline behavior.
 
 Module complete when a Student can discover and submit eligible assignments end to end.
 

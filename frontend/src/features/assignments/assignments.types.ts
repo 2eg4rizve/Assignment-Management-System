@@ -27,6 +27,15 @@ export type AssignmentListItem = {
   studentSubmissionStatus: SubmissionStatus | null;
   createdAtUtc: string;
 };
+export type AssignmentSubmissionSummary = {
+  id: string;
+  status: SubmissionStatus;
+  submittedAtUtc: string;
+  lastSubmittedAtUtc: string;
+  marksAwarded: number | null;
+  feedback: string | null;
+};
+
 export type AssignmentDetail = {
   id: string;
   title: string;
@@ -42,7 +51,7 @@ export type AssignmentDetail = {
   createdAtUtc: string;
   updatedAtUtc: string | null;
   rowVersion: string;
-  submissionSummary: unknown | null;
+  submissionSummary: AssignmentSubmissionSummary | null;
 };
 export type AssignmentMutation = {
   id: string;
