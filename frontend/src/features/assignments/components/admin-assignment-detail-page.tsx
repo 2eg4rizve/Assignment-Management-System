@@ -49,7 +49,6 @@ export function AdminAssignmentDetailPage({ id }: { id: string }) {
               {new Intl.DateTimeFormat("en-BD", {
                 dateStyle: "long",
                 timeStyle: "short",
-                timeZoneName: "short",
               }).format(new Date(query.data.deadlineUtc))}
             </p>
           </div>

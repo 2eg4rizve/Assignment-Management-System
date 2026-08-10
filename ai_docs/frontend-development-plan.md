@@ -692,9 +692,9 @@ Dependencies: M01–M10.
 - [x] Run lint, type-check, unit/component tests, end-to-end tests, and production build.
 - [x] Document setup, commands, environment variables, demo accounts, and known limitations.
 
-The deterministic browser workflows use same-origin API contracts. Running the same
-workflows against the local PostgreSQL database still requires a valid local connection
-string; the checked-in development password is not valid for the current database.
+The deterministic browser workflows use same-origin API contracts. The opt-in live
+suite also verifies all seeded roles against the local PostgreSQL-backed API; full live
+mutation workflows remain a release verification step.
 
 Module complete when a new developer can clone, configure, run, test, and understand the frontend and the complete role workflow passes without manual database edits.
 

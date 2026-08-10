@@ -43,7 +43,6 @@ const columns: readonly DataTableColumn<AssignmentListItem>[] = [
       new Intl.DateTimeFormat("en-BD", {
         dateStyle: "medium",
         timeStyle: "short",
-        timeZoneName: "short",
       }).format(new Date(item.deadlineUtc)),
   },
   { id: "marks", header: "Marks", cell: (item) => item.maximumMarks },

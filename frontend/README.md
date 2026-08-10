@@ -70,9 +70,11 @@ Then run from `frontend/`:
 ```powershell
 Copy-Item .env.example .env.local
 npm run e2e
+$env:LIVE_E2E='1'
+npm run e2e -- --grep "live seeded environment"
 ```
 
-The browser suite covers role guards, session expiry, network failures, responsive navigation, academic setup, assignment publishing, submission, grading, and feedback. Run the workflows against the live seeded PostgreSQL database before release.
+The deterministic browser suite covers role guards, session expiry, network failures, responsive navigation, academic setup, assignment publishing, submission, grading, and feedback. The opt-in live suite verifies that every seeded role can authenticate and render its PostgreSQL-backed dashboard.
 
 ## Known limitations
 

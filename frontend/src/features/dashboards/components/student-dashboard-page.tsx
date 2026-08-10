@@ -87,7 +87,6 @@ export function StudentDashboardPage() {
                     {new Intl.DateTimeFormat("en-BD", {
                       dateStyle: "medium",
                       timeStyle: "short",
-                      timeZoneName: "short",
                     }).format(new Date(item.deadlineUtc))}
                   </p>
                 </div>
