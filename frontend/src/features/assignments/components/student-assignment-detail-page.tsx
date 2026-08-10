@@ -64,7 +64,7 @@ export function StudentAssignmentDetailPage({ id }: { id: string }) {
       <PageHeader
         eyebrow={`${assignment.data.course.code} · ${assignment.data.subject.code}`}
         title={assignment.data.title}
-        description={`Due ${new Intl.DateTimeFormat("en-BD", { dateStyle: "long", timeStyle: "short", timeZoneName: "short" }).format(new Date(assignment.data.deadlineUtc))}`}
+        description={`Due ${new Intl.DateTimeFormat("en-BD", { dateStyle: "long", timeStyle: "short" }).format(new Date(assignment.data.deadlineUtc))}`}
       />
       <div className="bg-card space-y-5 rounded-xl border p-6 shadow-sm">
         <div className="flex flex-wrap gap-8">

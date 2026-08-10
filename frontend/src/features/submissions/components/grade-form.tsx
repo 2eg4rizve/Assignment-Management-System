@@ -81,8 +81,11 @@ export function GradeForm({
         </Alert>
       ) : null}
       <div className="space-y-1.5">
-        <Label>Marks awarded (maximum {maximumMarks})</Label>
+        <Label htmlFor="marksAwarded">
+          Marks awarded (maximum {maximumMarks})
+        </Label>
         <Input
+          id="marksAwarded"
           type="number"
           min="0"
           max={maximumMarks}
@@ -96,8 +99,9 @@ export function GradeForm({
         ) : null}
       </div>
       <div className="space-y-1.5">
-        <Label>Feedback</Label>
+        <Label htmlFor="feedback">Feedback</Label>
         <textarea
+          id="feedback"
           className="border-input bg-background focus-visible:ring-ring min-h-36 w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none"
           {...register("feedback")}
         />

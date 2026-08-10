@@ -63,8 +63,9 @@ export function SubmissionForm({
         </Alert>
       ) : null}
       <div className="space-y-1.5">
-        <Label>Your answer</Label>
+        <Label htmlFor="answerText">Your answer</Label>
         <textarea
+          id="answerText"
           className="border-input bg-background focus-visible:ring-ring min-h-72 w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none"
           {...register("answerText")}
         />

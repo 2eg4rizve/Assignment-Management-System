@@ -72,7 +72,7 @@ export function TeacherAssignmentDetailPage({ id }: { id: string }) {
       <PageHeader
         eyebrow={`${query.data.course.code} · ${query.data.subject.code}`}
         title={query.data.title}
-        description={`Due ${new Intl.DateTimeFormat("en-BD", { dateStyle: "long", timeStyle: "short", timeZoneName: "short" }).format(new Date(query.data.deadlineUtc))}`}
+        description={`Due ${new Intl.DateTimeFormat("en-BD", { dateStyle: "long", timeStyle: "short" }).format(new Date(query.data.deadlineUtc))}`}
         actions={
           <>
             <StatusBadge

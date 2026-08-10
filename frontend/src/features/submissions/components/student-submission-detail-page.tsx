@@ -32,7 +32,7 @@ export function StudentSubmissionDetailPage({ id }: { id: string }) {
       <PageHeader
         eyebrow={`${query.data.assignment.course.code} · ${query.data.assignment.subject.code}`}
         title={query.data.assignment.title}
-        description={`Last submitted ${new Intl.DateTimeFormat("en-BD", { dateStyle: "long", timeStyle: "short", timeZoneName: "short" }).format(new Date(query.data.lastSubmittedAtUtc))}`}
+        description={`Last submitted ${new Intl.DateTimeFormat("en-BD", { dateStyle: "long", timeStyle: "short" }).format(new Date(query.data.lastSubmittedAtUtc))}`}
         actions={
           <StatusBadge
             label={query.data.status}
