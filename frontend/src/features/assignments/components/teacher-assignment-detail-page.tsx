@@ -21,6 +21,7 @@ import {
   getAssignment,
   publishAssignment,
 } from "../assignments.api";
+import { getAssignmentActions } from "../assignment-lifecycle";
 
 export function TeacherAssignmentDetailPage({ id }: { id: string }) {
   const router = useRouter();
@@ -59,6 +60,7 @@ export function TeacherAssignmentDetailPage({ id }: { id: string }) {
   const mutationError = publish.error ?? close.error ?? remove.error;
   const conflict =
     mutationError instanceof ApiError && mutationError.status === 409;
+  const actions = getAssignmentActions(query.data.status);
   return (
     <div className="space-y-6">
       <Button asChild size="sm" variant="ghost">
@@ -77,13 +79,15 @@ export function TeacherAssignmentDetailPage({ id }: { id: string }) {
               label={query.data.status}
               status={query.data.status.toLowerCase()}
             />
-            <Button asChild variant="outline">
-              <Link href={`/teacher/assignments/${id}/edit`}>
-                <Edit aria-hidden="true" />
-                Edit
-              </Link>
-            </Button>
-            {query.data.status === "Draft" ? (
+            {actions.canEdit ? (
+              <Button asChild variant="outline">
+                <Link href={`/teacher/assignments/${id}/edit`}>
+                  <Edit aria-hidden="true" />
+                  Edit
+                </Link>
+              </Button>
+            ) : null}
+            {actions.canPublish ? (
               <>
                 <ConfirmDialog
                   title="Publish assignment?"
@@ -109,7 +113,7 @@ export function TeacherAssignmentDetailPage({ id }: { id: string }) {
                 />
               </>
             ) : null}
-            {query.data.status === "Published" ? (
+            {actions.canClose ? (
               <ConfirmDialog
                 title="Close assignment?"
                 description="Students will no longer be able to submit answers."

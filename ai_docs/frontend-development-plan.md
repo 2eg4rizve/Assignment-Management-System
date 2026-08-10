@@ -636,8 +636,8 @@ Dependencies: M06.
 - [x] Implement publish, close, and draft-delete actions.
 - [x] Carry the latest `rowVersion` through every concurrent mutation.
 - [x] Show clear `409 Conflict` recovery and record reload behavior.
-- [ ] Add Admin read-only assignment views.
-- [ ] Test draft, published, closed, forbidden, and stale-version states.
+- [x] Add Admin read-only assignment views.
+- [x] Test draft, published, closed, forbidden, and stale-version states.
 
 Module complete when a Teacher can manage the complete assignment lifecycle without Swagger.
 
