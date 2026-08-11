@@ -12,7 +12,7 @@ export function FilterBar({ children, className }: FilterBarProps) {
     <div
       aria-label="List filters"
       className={cn(
-        "bg-card flex flex-col gap-3 rounded-xl border p-3 sm:flex-row sm:items-end",
+        "bg-card flex flex-col gap-3 rounded-xl border p-3 sm:flex-row sm:flex-wrap sm:items-end",
         className,
       )}
       role="search"

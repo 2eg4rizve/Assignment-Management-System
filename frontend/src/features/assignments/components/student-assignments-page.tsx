@@ -22,6 +22,7 @@ import type {
   AssignmentFilters,
   AssignmentListItem,
 } from "../assignments.types";
+import { AssignmentFilterSelects } from "./assignment-filter-selects";
 
 const columns: readonly DataTableColumn<AssignmentListItem>[] = [
   {
@@ -81,6 +82,8 @@ export function StudentAssignmentsPage() {
     pageSize: 20,
     search: searchParams.get("search") || undefined,
     status: "Published" as AssignmentStatus,
+    courseId: searchParams.get("course") || undefined,
+    subjectId: searchParams.get("subject") || undefined,
     sortBy: "Deadline",
     sortDirection: "Asc",
   };
@@ -111,6 +114,13 @@ export function StudentAssignmentsPage() {
             setSearch(value);
             setFilter("search", value);
           }}
+        />
+        <AssignmentFilterSelects
+          courseId={filters.courseId}
+          subjectId={filters.subjectId}
+          requiredStatus="Published"
+          scope="student"
+          onFilterChange={setFilter}
         />
       </FilterBar>
       {query.isPending ? <LoadingState /> : null}

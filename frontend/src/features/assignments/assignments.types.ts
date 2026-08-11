@@ -80,6 +80,7 @@ export type AssignmentFilters = {
   status?: AssignmentStatus;
   courseId?: string;
   subjectId?: string;
+  teacherId?: string;
   deadlineFromUtc?: string;
   deadlineToUtc?: string;
   sortBy?: "CreatedAt" | "Deadline" | "Title";

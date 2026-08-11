@@ -15,11 +15,14 @@ describe("assignments API", () => {
       pageNumber: 1,
       pageSize: 20,
       status: "Draft",
+      courseId: "course-1",
+      subjectId: "subject-1",
+      teacherId: "teacher-1",
       sortBy: "Deadline",
       sortDirection: "Asc",
     });
     expect(fetchMock.mock.calls[0][0]).toBe(
-      "/api/assignments?pageNumber=1&pageSize=20&status=Draft&sortBy=Deadline&sortDirection=Asc",
+      "/api/assignments?pageNumber=1&pageSize=20&status=Draft&courseId=course-1&subjectId=subject-1&teacherId=teacher-1&sortBy=Deadline&sortDirection=Asc",
     );
   });
   it("publishes with the concurrency token", async () => {
