@@ -13,7 +13,7 @@ const student = {
 describe("createUserSchema", () => {
   it("accepts a structured student ID", () => {
     expect(
-      createUserSchema.safeParse({ ...student, studentCode: "CSE-26-03-001" })
+      createUserSchema.safeParse({ ...student, studentCode: "C263001" })
         .success,
     ).toBe(true);
   });
@@ -21,7 +21,7 @@ describe("createUserSchema", () => {
   it("requires a valid student ID for student accounts", () => {
     expect(createUserSchema.safeParse(student).success).toBe(false);
     expect(
-      createUserSchema.safeParse({ ...student, studentCode: "C263001" })
+      createUserSchema.safeParse({ ...student, studentCode: "CSE-26-03-001" })
         .success,
     ).toBe(false);
   });
@@ -29,12 +29,13 @@ describe("createUserSchema", () => {
   it("requires a structured teacher ID for teacher accounts", () => {
     const teacher = { ...student, role: "Teacher" as const };
     expect(
-      createUserSchema.safeParse({ ...teacher, teacherCode: "T-CSE-26-001" })
+      createUserSchema.safeParse({ ...teacher, teacherCode: "T263001" })
         .success,
     ).toBe(true);
     expect(createUserSchema.safeParse(teacher).success).toBe(false);
     expect(
-      createUserSchema.safeParse({ ...teacher, teacherCode: "T26001" }).success,
+      createUserSchema.safeParse({ ...teacher, teacherCode: "T-CSE-26-001" })
+        .success,
     ).toBe(false);
   });
 });

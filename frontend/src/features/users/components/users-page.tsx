@@ -92,6 +92,8 @@ export function UsersPage() {
     pageNumber: Math.max(Number(searchParams.get("page")) || 1, 1),
     pageSize: 20,
     search: searchParams.get("search") || undefined,
+    studentCode: searchParams.get("studentId") || undefined,
+    teacherCode: searchParams.get("teacherId") || undefined,
     role: (searchParams.get("role") as UserRole | null) ?? undefined,
     isActive: searchParams.has("active")
       ? searchParams.get("active") === "true"
@@ -137,6 +139,28 @@ export function UsersPage() {
           placeholder="Search name, email or institutional ID"
           value={search}
         />
+        <div className="space-y-1.5">
+          <Label htmlFor="student-id-filter">Student ID</Label>
+          <Input
+            className="w-36"
+            id="student-id-filter"
+            maxLength={7}
+            placeholder="C263001"
+            value={filters.studentCode ?? ""}
+            onChange={(event) => setFilter("studentId", event.target.value)}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="teacher-id-filter">Teacher ID</Label>
+          <Input
+            className="w-36"
+            id="teacher-id-filter"
+            maxLength={7}
+            placeholder="T263001"
+            value={filters.teacherCode ?? ""}
+            onChange={(event) => setFilter("teacherId", event.target.value)}
+          />
+        </div>
         <div className="space-y-1.5">
           <Label>Role</Label>
           <Select

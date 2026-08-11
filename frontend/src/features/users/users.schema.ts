@@ -28,12 +28,12 @@ const validateRoleCodes = (
   } else if (
     value.role === "Student" &&
     value.studentCode &&
-    !/^[A-Za-z]{1,10}-\d{2}-\d{2}-\d{3,5}$/.test(value.studentCode)
+    !/^[A-Za-z]\d{6}$/.test(value.studentCode)
   ) {
     context.addIssue({
       code: "custom",
       path: ["studentCode"],
-      message: "Use a format such as CSE-26-03-001.",
+      message: "Use a format such as C263001.",
     });
   }
   if (value.role === "Teacher" && !value.teacherCode) {
@@ -45,12 +45,12 @@ const validateRoleCodes = (
   } else if (
     value.role === "Teacher" &&
     value.teacherCode &&
-    !/^T-[A-Za-z]{1,10}-\d{2}-\d{3,5}$/.test(value.teacherCode)
+    !/^T\d{6}$/i.test(value.teacherCode)
   ) {
     context.addIssue({
       code: "custom",
       path: ["teacherCode"],
-      message: "Use a format such as T-CSE-26-001.",
+      message: "Use a format such as T263001.",
     });
   }
 };

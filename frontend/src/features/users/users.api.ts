@@ -16,6 +16,8 @@ function usersUrl(filters: UserFilters) {
   });
   if (filters.search) query.set("search", filters.search);
   if (filters.role) query.set("role", filters.role);
+  if (filters.studentCode) query.set("studentCode", filters.studentCode);
+  if (filters.teacherCode) query.set("teacherCode", filters.teacherCode);
   if (filters.isActive !== undefined) {
     query.set("isActive", String(filters.isActive));
   }

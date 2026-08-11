@@ -32,6 +32,18 @@ public sealed class UserService(
         }
         if (request.IsActive.HasValue)
             query = query.Where(user => user.IsActive == request.IsActive.Value);
+        if (!string.IsNullOrWhiteSpace(request.StudentCode))
+        {
+            var pattern = $"{request.StudentCode.Trim()}%";
+            query = query.Where(user => user.StudentCode != null &&
+                EF.Functions.ILike(user.StudentCode, pattern));
+        }
+        if (!string.IsNullOrWhiteSpace(request.TeacherCode))
+        {
+            var pattern = $"{request.TeacherCode.Trim()}%";
+            query = query.Where(user => user.TeacherCode != null &&
+                EF.Functions.ILike(user.TeacherCode, pattern));
+        }
         if (request.CreatedFromUtc.HasValue)
             query = query.Where(user => user.CreatedAtUtc >= request.CreatedFromUtc.Value);
         if (request.CreatedToUtc.HasValue)

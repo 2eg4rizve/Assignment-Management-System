@@ -39,4 +39,6 @@ export type UserFilters = {
   search?: string;
   createdFromUtc?: string;
   createdToUtc?: string;
+  studentCode?: string;
+  teacherCode?: string;
 };

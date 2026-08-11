@@ -61,12 +61,12 @@ export function UserFormFields({
           >
             <Input
               id="studentCode"
-              placeholder="CSE-26-03-001"
+              placeholder="C263001"
               {...register("studentCode")}
             />
           </FormField>
           <p className="text-muted-foreground mt-1 text-xs">
-            Program – admission year – semester – serial number
+            Course – admission year – semester – serial number
           </p>
         </div>
       ) : null}
@@ -79,12 +79,12 @@ export function UserFormFields({
           >
             <Input
               id="teacherCode"
-              placeholder="T-CSE-26-001"
+              placeholder="T263001"
               {...register("teacherCode")}
             />
           </FormField>
           <p className="text-muted-foreground mt-1 text-xs">
-            Teacher – department – joining year – serial number
+            Teacher – joining year – semester – serial number
           </p>
         </div>
       ) : null}

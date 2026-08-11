@@ -26,10 +26,12 @@ describe("users API", () => {
       pageSize: 20,
       role: "Teacher",
       search: "amina",
+      studentCode: "C26",
+      teacherCode: "T26",
     });
 
     expect(fetchMock.mock.calls[0][0]).toBe(
-      "/api/users?pageNumber=2&pageSize=20&search=amina&role=Teacher&isActive=true",
+      "/api/users?pageNumber=2&pageSize=20&search=amina&role=Teacher&studentCode=C26&teacherCode=T26&isActive=true",
     );
   });
 
