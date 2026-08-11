@@ -41,6 +41,12 @@ public sealed class SubmissionRepository : Repository<Submission>, ISubmissionRe
             query = request.HasGrade.Value
                 ? query.Where(item => item.MarksAwarded != null)
                 : query.Where(item => item.MarksAwarded == null);
+        if (request.GradedById.HasValue)
+            query = query.Where(item => item.GradedBy == request.GradedById.Value);
+        if (request.MinimumMarks.HasValue)
+            query = query.Where(item => item.MarksAwarded >= request.MinimumMarks.Value);
+        if (request.MaximumMarks.HasValue)
+            query = query.Where(item => item.MarksAwarded <= request.MaximumMarks.Value);
         if (request.SubmittedFromUtc.HasValue)
             query = query.Where(item => item.LastSubmittedAtUtc >= request.SubmittedFromUtc.Value);
         if (request.SubmittedToUtc.HasValue)
@@ -62,6 +68,7 @@ public sealed class SubmissionRepository : Repository<Submission>, ISubmissionRe
             : query.OrderByDescending(item => item.LastSubmittedAtUtc);
         var items = await (from item in query.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize)
             let student = _dbContext.Users.First(user => user.Id == item.StudentId)
+            let grader = item.GradedBy.HasValue ? _dbContext.Users.FirstOrDefault(user => user.Id == item.GradedBy) : null
             select new SubmissionListReadModel(item.Id, item.AssignmentId, item.Assignment.Title,
                 item.StudentId, (student.FirstName + " " + student.LastName).Trim(), student.Email ?? string.Empty,
                 item.Status, item.Assignment.TeachingAssignment.CourseId,
@@ -70,7 +77,8 @@ public sealed class SubmissionRepository : Repository<Submission>, ISubmissionRe
                 item.Assignment.TeachingAssignment.Subject.Name,
                 item.SubmittedAtUtc, item.LastSubmittedAtUtc,
                 isAdmin || isTeacher || item.Status == SubmissionStatus.Graded ? item.MarksAwarded : null,
-                item.Assignment.MaximumMarks, item.LastSubmittedAtUtc > item.Assignment.DeadlineUtc))
+                item.Assignment.MaximumMarks, item.LastSubmittedAtUtc > item.Assignment.DeadlineUtc,
+                item.GradedBy, grader == null ? null : (grader.FirstName + " " + grader.LastName).Trim()))
             .ToListAsync(cancellationToken);
         return (items, totalCount);
     }

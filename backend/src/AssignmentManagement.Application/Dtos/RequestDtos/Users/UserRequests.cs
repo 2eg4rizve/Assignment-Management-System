@@ -51,4 +51,8 @@ public sealed record UserQueryRequest : PaginationRequest
     public UserRole? Role { get; init; }
 
     public bool? IsActive { get; init; }
+
+    public DateTimeOffset? CreatedFromUtc { get; init; }
+
+    public DateTimeOffset? CreatedToUtc { get; init; }
 }

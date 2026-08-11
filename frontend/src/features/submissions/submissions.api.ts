@@ -21,6 +21,10 @@ export function getMySubmissions(filters: SubmissionFilters) {
   if (filters.isLate !== undefined) query.set("isLate", String(filters.isLate));
   if (filters.hasGrade !== undefined)
     query.set("hasGrade", String(filters.hasGrade));
+  if (filters.minimumMarks !== undefined)
+    query.set("minimumMarks", String(filters.minimumMarks));
+  if (filters.maximumMarks !== undefined)
+    query.set("maximumMarks", String(filters.maximumMarks));
   if (filters.submittedFromUtc)
     query.set("submittedFromUtc", filters.submittedFromUtc);
   if (filters.submittedToUtc)
@@ -44,6 +48,11 @@ export function getSubmissions(filters: SubmissionFilters) {
   if (filters.isLate !== undefined) query.set("isLate", String(filters.isLate));
   if (filters.hasGrade !== undefined)
     query.set("hasGrade", String(filters.hasGrade));
+  if (filters.gradedById) query.set("gradedById", filters.gradedById);
+  if (filters.minimumMarks !== undefined)
+    query.set("minimumMarks", String(filters.minimumMarks));
+  if (filters.maximumMarks !== undefined)
+    query.set("maximumMarks", String(filters.maximumMarks));
   if (filters.submittedFromUtc)
     query.set("submittedFromUtc", filters.submittedFromUtc);
   if (filters.submittedToUtc)

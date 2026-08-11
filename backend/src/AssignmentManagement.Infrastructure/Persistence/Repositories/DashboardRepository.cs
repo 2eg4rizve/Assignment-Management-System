@@ -49,7 +49,7 @@ public sealed class DashboardRepository(ApplicationDbContext dbContext) : IDashb
                 item.Assignment.TeachingAssignment.Subject.Name,
                 item.SubmittedAtUtc,
                 item.LastSubmittedAtUtc, item.MarksAwarded, item.Assignment.MaximumMarks,
-                item.LastSubmittedAtUtc > item.Assignment.DeadlineUtc))
+                item.LastSubmittedAtUtc > item.Assignment.DeadlineUtc, null, null))
             .Take(SummaryItemCount).ToListAsync(cancellationToken);
         return new TeacherDashboardResponse(totalAssignments, publishedAssignments, awaitingReview, recent);
     }

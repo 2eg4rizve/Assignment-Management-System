@@ -14,6 +14,7 @@ export function getCourses(filters: CourseFilters) {
   });
   if (filters.search) query.set("search", filters.search);
   if (filters.academicYear) query.set("academicYear", filters.academicYear);
+  if (filters.section) query.set("section", filters.section);
   if (filters.isActive !== undefined)
     query.set("isActive", String(filters.isActive));
   return browserRequest<PagedResponse<Course>>(`/api/courses?${query}`);

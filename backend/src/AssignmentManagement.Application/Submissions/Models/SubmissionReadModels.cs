@@ -7,7 +7,8 @@ public sealed record SubmissionListReadModel(
     string StudentName, string StudentEmail, SubmissionStatus Status,
     Guid CourseId, string CourseName, Guid SubjectId, string SubjectName,
     DateTimeOffset SubmittedAtUtc, DateTimeOffset LastSubmittedAtUtc,
-    decimal? MarksAwarded, decimal MaximumMarks, bool IsLate);
+    decimal? MarksAwarded, decimal MaximumMarks, bool IsLate,
+    Guid? GradedById, string? GradedByName);
 
 public sealed record SubmissionDetailReadModel(
     Guid Id, Guid AssignmentId, string AssignmentTitle, DateTimeOffset AssignmentDeadlineUtc,

@@ -25,5 +25,6 @@ export type CourseFilters = {
   pageSize: number;
   search?: string;
   academicYear?: string;
+  section?: string;
   isActive?: boolean;
 };

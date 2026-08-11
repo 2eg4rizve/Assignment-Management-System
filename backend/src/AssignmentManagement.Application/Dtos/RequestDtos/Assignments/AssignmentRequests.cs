@@ -67,6 +67,14 @@ public sealed record AssignmentQueryRequest : PaginationRequest
 
     public Guid? TeacherId { get; init; }
 
+    public bool? AllowResubmission { get; init; }
+
+    [Range(typeof(decimal), "0", "99999.99")]
+    public decimal? MinimumMarks { get; init; }
+
+    [Range(typeof(decimal), "0", "99999.99")]
+    public decimal? MaximumMarks { get; init; }
+
     public DateTimeOffset? DeadlineFromUtc { get; init; }
 
     public DateTimeOffset? DeadlineToUtc { get; init; }

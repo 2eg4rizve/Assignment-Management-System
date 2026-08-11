@@ -41,6 +41,12 @@ public sealed class AssignmentRepository : Repository<DomainAssignment>, IAssign
             query = query.Where(item => item.TeachingAssignment.SubjectId == request.SubjectId.Value);
         if (request.TeacherId.HasValue)
             query = query.Where(item => item.TeachingAssignment.TeacherId == request.TeacherId.Value);
+        if (request.AllowResubmission.HasValue)
+            query = query.Where(item => item.AllowResubmission == request.AllowResubmission.Value);
+        if (request.MinimumMarks.HasValue)
+            query = query.Where(item => item.MaximumMarks >= request.MinimumMarks.Value);
+        if (request.MaximumMarks.HasValue)
+            query = query.Where(item => item.MaximumMarks <= request.MaximumMarks.Value);
         if (request.DeadlineFromUtc.HasValue)
             query = query.Where(item => item.DeadlineUtc >= request.DeadlineFromUtc.Value);
         if (request.DeadlineToUtc.HasValue)

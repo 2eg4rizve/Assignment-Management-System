@@ -20,6 +20,7 @@ import { SearchInput } from "@/shared/components/filters/search-input";
 import { PageHeader } from "@/shared/components/layout/page-header";
 import { Button } from "@/shared/components/ui/button";
 import { Label } from "@/shared/components/ui/label";
+import { Input } from "@/shared/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -89,6 +90,8 @@ export function UsersPage() {
     isActive: searchParams.has("active")
       ? searchParams.get("active") === "true"
       : undefined,
+    createdFromUtc: searchParams.get("from") || undefined,
+    createdToUtc: searchParams.get("to") || undefined,
   };
   const [search, setSearch] = useState(filters.search ?? "");
   const query = useQuery({
@@ -166,6 +169,40 @@ export function UsersPage() {
               <SelectItem value="false">Inactive</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="users-created-from">Created from</Label>
+          <Input
+            className="w-40"
+            id="users-created-from"
+            type="date"
+            value={filters.createdFromUtc?.slice(0, 10) ?? ""}
+            onChange={(event) =>
+              setFilter(
+                "from",
+                event.target.value
+                  ? new Date(`${event.target.value}T00:00:00`).toISOString()
+                  : undefined,
+              )
+            }
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="users-created-to">Created to</Label>
+          <Input
+            className="w-40"
+            id="users-created-to"
+            type="date"
+            value={filters.createdToUtc?.slice(0, 10) ?? ""}
+            onChange={(event) =>
+              setFilter(
+                "to",
+                event.target.value
+                  ? new Date(`${event.target.value}T23:59:59.999`).toISOString()
+                  : undefined,
+              )
+            }
+          />
         </div>
       </FilterBar>
       {query.isPending ? <LoadingState /> : null}

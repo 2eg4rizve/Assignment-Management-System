@@ -59,6 +59,14 @@ public sealed record SubmissionQueryRequest : PaginationRequest
 
     public bool? HasGrade { get; init; }
 
+    public Guid? GradedById { get; init; }
+
+    [Range(typeof(decimal), "0", "99999.99")]
+    public decimal? MinimumMarks { get; init; }
+
+    [Range(typeof(decimal), "0", "99999.99")]
+    public decimal? MaximumMarks { get; init; }
+
     public DateTimeOffset? SubmittedFromUtc { get; init; }
 
     public DateTimeOffset? SubmittedToUtc { get; init; }

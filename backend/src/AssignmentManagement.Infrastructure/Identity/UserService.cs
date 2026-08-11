@@ -32,6 +32,10 @@ public sealed class UserService(
         }
         if (request.IsActive.HasValue)
             query = query.Where(user => user.IsActive == request.IsActive.Value);
+        if (request.CreatedFromUtc.HasValue)
+            query = query.Where(user => user.CreatedAtUtc >= request.CreatedFromUtc.Value);
+        if (request.CreatedToUtc.HasValue)
+            query = query.Where(user => user.CreatedAtUtc <= request.CreatedToUtc.Value);
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var pattern = $"%{request.Search.Trim()}%";

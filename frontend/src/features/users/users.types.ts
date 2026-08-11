@@ -33,4 +33,6 @@ export type UserFilters = {
   pageSize: number;
   role?: UserRole;
   search?: string;
+  createdFromUtc?: string;
+  createdToUtc?: string;
 };

@@ -25,6 +25,8 @@ export type SubmissionListItem = {
   marksAwarded: number | null;
   maximumMarks: number;
   isLate: boolean;
+  gradedById: string | null;
+  gradedByName: string | null;
 };
 export type SubmissionDetail = {
   id: string;
@@ -68,6 +70,9 @@ export type SubmissionFilters = {
   status?: SubmissionStatus;
   isLate?: boolean;
   hasGrade?: boolean;
+  gradedById?: string;
+  minimumMarks?: number;
+  maximumMarks?: number;
   submittedFromUtc?: string;
   submittedToUtc?: string;
   sortDirection?: "Asc" | "Desc";

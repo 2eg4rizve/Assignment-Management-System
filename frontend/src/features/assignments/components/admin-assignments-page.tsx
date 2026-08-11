@@ -85,6 +85,12 @@ const columns: readonly DataTableColumn<AssignmentListItem>[] = [
 export function AdminAssignmentsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [sortBy, sortDirection] = (
+    searchParams.get("sort") ?? "Deadline:Asc"
+  ).split(":") as [
+    AssignmentFilters["sortBy"],
+    AssignmentFilters["sortDirection"],
+  ];
   const filters: AssignmentFilters = {
     pageNumber: Math.max(Number(searchParams.get("page")) || 1, 1),
     pageSize: 20,
@@ -94,8 +100,15 @@ export function AdminAssignmentsPage() {
     courseId: searchParams.get("course") || undefined,
     subjectId: searchParams.get("subject") || undefined,
     teacherId: searchParams.get("teacher") || undefined,
-    sortBy: "Deadline",
-    sortDirection: "Asc",
+    deadlineFromUtc: searchParams.get("deadlineFrom") || undefined,
+    deadlineToUtc: searchParams.get("deadlineTo") || undefined,
+    minimumMarks: Number(searchParams.get("minMarks")) || undefined,
+    maximumMarks: Number(searchParams.get("maxMarks")) || undefined,
+    allowResubmission: searchParams.has("resubmission")
+      ? searchParams.get("resubmission") === "true"
+      : undefined,
+    sortBy,
+    sortDirection,
   };
   const [search, setSearch] = useState(filters.search ?? "");
   const query = useQuery({
@@ -130,6 +143,12 @@ export function AdminAssignmentsPage() {
           subjectId={filters.subjectId}
           teacherId={filters.teacherId}
           includeTeacher
+          deadlineFromUtc={filters.deadlineFromUtc}
+          deadlineToUtc={filters.deadlineToUtc}
+          minimumMarks={filters.minimumMarks}
+          maximumMarks={filters.maximumMarks}
+          allowResubmission={filters.allowResubmission}
+          sort={`${filters.sortBy}:${filters.sortDirection}`}
           scope="admin"
           onFilterChange={setFilter}
         />

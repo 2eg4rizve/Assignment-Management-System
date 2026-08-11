@@ -83,6 +83,9 @@ export type AssignmentFilters = {
   teacherId?: string;
   deadlineFromUtc?: string;
   deadlineToUtc?: string;
+  minimumMarks?: number;
+  maximumMarks?: number;
+  allowResubmission?: boolean;
   sortBy?: "CreatedAt" | "Deadline" | "Title";
   sortDirection?: SortDirection;
 };

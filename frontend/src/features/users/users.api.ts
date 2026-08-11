@@ -19,6 +19,9 @@ function usersUrl(filters: UserFilters) {
   if (filters.isActive !== undefined) {
     query.set("isActive", String(filters.isActive));
   }
+  if (filters.createdFromUtc)
+    query.set("createdFromUtc", filters.createdFromUtc);
+  if (filters.createdToUtc) query.set("createdToUtc", filters.createdToUtc);
   return `/api/users?${query}`;
 }
 

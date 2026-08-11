@@ -52,4 +52,7 @@ public sealed record CourseQueryRequest : PaginationRequest
 
     [StringLength(ValidationConstants.AcademicYearMaxLength)]
     public string? AcademicYear { get; init; }
+
+    [StringLength(ValidationConstants.SectionMaxLength)]
+    public string? Section { get; init; }
 }

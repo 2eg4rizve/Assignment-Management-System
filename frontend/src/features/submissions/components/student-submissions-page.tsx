@@ -104,9 +104,12 @@ export function StudentSubmissionsPage() {
     hasGrade: searchParams.has("graded")
       ? searchParams.get("graded") === "true"
       : undefined,
+    minimumMarks: Number(searchParams.get("minMarks")) || undefined,
+    maximumMarks: Number(searchParams.get("maxMarks")) || undefined,
     submittedFromUtc: searchParams.get("from") || undefined,
     submittedToUtc: searchParams.get("to") || undefined,
-    sortDirection: "Desc",
+    sortDirection:
+      (searchParams.get("sort") as "Asc" | "Desc" | null) ?? "Desc",
   };
   const [search, setSearch] = useState(filters.search ?? "");
   const query = useQuery({

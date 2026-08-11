@@ -19,7 +19,9 @@ public sealed record SubmissionListItemResponse(
     DateTimeOffset LastSubmittedAtUtc,
     decimal? MarksAwarded,
     decimal MaximumMarks,
-    bool IsLate);
+    bool IsLate,
+    Guid? GradedById,
+    string? GradedByName);
 
 public sealed record SubmissionDetailResponse(
     Guid Id,

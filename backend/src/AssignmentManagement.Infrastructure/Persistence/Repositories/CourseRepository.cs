@@ -59,6 +59,12 @@ public sealed class CourseRepository : Repository<Course>, ICourseRepository
             query = query.Where(course => course.AcademicYear == academicYear);
         }
 
+        if (!string.IsNullOrWhiteSpace(request.Section))
+        {
+            var section = request.Section.Trim();
+            query = query.Where(course => course.Section == section);
+        }
+
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var searchPattern = $"%{request.Search.Trim()}%";

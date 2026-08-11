@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -21,10 +21,14 @@ type FilterName =
   | "course"
   | "subject"
   | "student"
+  | "grader"
   | "late"
   | "graded"
+  | "minMarks"
+  | "maxMarks"
   | "from"
-  | "to";
+  | "to"
+  | "sort";
 
 type Props = {
   filters: SubmissionFilters;
@@ -50,6 +54,7 @@ export function SubmissionFilterControls({
   assignmentLocked = false,
   onFilterChange,
 }: Props) {
+  const [optionSearch, setOptionSearch] = useState("");
   const optionsQuery = useQuery({
     queryKey: ["submissions", "filter-options", mode],
     queryFn: () =>
@@ -62,24 +67,31 @@ export function SubmissionFilterControls({
     const unique = <T extends { id: string }>(values: T[]) => [
       ...new Map(values.map((value) => [value.id, value])).values(),
     ];
+    const matches = (name: string) =>
+      name.toLowerCase().includes(optionSearch.trim().toLowerCase());
     return {
       assignments: unique(
         items.map((item) => ({
           id: item.assignmentId,
           name: item.assignmentTitle,
         })),
-      ),
+      ).filter((item) => matches(item.name)),
       courses: unique(
         items.map((item) => ({ id: item.courseId, name: item.courseName })),
-      ),
+      ).filter((item) => matches(item.name)),
       subjects: unique(
         items.map((item) => ({ id: item.subjectId, name: item.subjectName })),
-      ),
+      ).filter((item) => matches(item.name)),
       students: unique(
         items.map((item) => ({ id: item.studentId, name: item.studentName })),
-      ),
+      ).filter((item) => matches(item.name)),
+      graders: unique(
+        items
+          .filter((item) => item.gradedById && item.gradedByName)
+          .map((item) => ({ id: item.gradedById!, name: item.gradedByName! })),
+      ).filter((item) => matches(item.name)),
     };
-  }, [optionsQuery.data]);
+  }, [optionSearch, optionsQuery.data]);
 
   const select = (
     label: string,
@@ -116,6 +128,16 @@ export function SubmissionFilterControls({
 
   return (
     <>
+      <div className="space-y-1.5">
+        <Label htmlFor={`${mode}-option-search`}>Find option</Label>
+        <Input
+          className="w-44"
+          id={`${mode}-option-search`}
+          placeholder="Course, student..."
+          value={optionSearch}
+          onChange={(event) => setOptionSearch(event.target.value)}
+        />
+      </div>
       {!assignmentLocked
         ? select(
             "Assignment",
@@ -128,6 +150,9 @@ export function SubmissionFilterControls({
       {select("Subject", "subject", filters.subjectId, options.subjects)}
       {mode !== "student"
         ? select("Student", "student", filters.studentId, options.students)
+        : null}
+      {mode !== "student"
+        ? select("Grader", "grader", filters.gradedById, options.graders)
         : null}
 
       <div className="space-y-1.5">
@@ -150,6 +175,33 @@ export function SubmissionFilterControls({
             <SelectItem value="true">Late</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor={`${mode}-minimum-marks`}>Min marks</Label>
+        <Input
+          className="w-28"
+          id={`${mode}-minimum-marks`}
+          min="0"
+          type="number"
+          value={filters.minimumMarks ?? ""}
+          onChange={(event) =>
+            onFilterChange("minMarks", event.target.value || undefined)
+          }
+        />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor={`${mode}-maximum-marks`}>Max marks</Label>
+        <Input
+          className="w-28"
+          id={`${mode}-maximum-marks`}
+          min="0"
+          type="number"
+          value={filters.maximumMarks ?? ""}
+          onChange={(event) =>
+            onFilterChange("maxMarks", event.target.value || undefined)
+          }
+        />
       </div>
 
       <div className="space-y-1.5">
@@ -196,6 +248,21 @@ export function SubmissionFilterControls({
             onFilterChange("to", toUtcDate(event.target.value, true))
           }
         />
+      </div>
+      <div className="space-y-1.5">
+        <Label>Sort</Label>
+        <Select
+          value={filters.sortDirection ?? "Desc"}
+          onValueChange={(value) => onFilterChange("sort", value)}
+        >
+          <SelectTrigger className="w-44" aria-label="Sort submissions">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Desc">Newest submitted</SelectItem>
+            <SelectItem value="Asc">Oldest submitted</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </>
   );

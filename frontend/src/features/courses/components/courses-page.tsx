@@ -80,6 +80,7 @@ export function CoursesPage() {
     pageSize: 20,
     search: searchParams.get("search") || undefined,
     academicYear: searchParams.get("year") || undefined,
+    section: searchParams.get("section") || undefined,
     isActive: searchParams.has("active")
       ? searchParams.get("active") === "true"
       : undefined,
@@ -146,6 +147,14 @@ export function CoursesPage() {
               <SelectItem value="false">Inactive</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        <div className="space-y-1.5">
+          <Label>Section</Label>
+          <SearchInput
+            value={filters.section ?? ""}
+            placeholder="All sections"
+            onValueChange={(value) => setFilter("section", value)}
+          />
         </div>
       </FilterBar>
       {query.isPending ? <LoadingState /> : null}
