@@ -30,6 +30,7 @@ import type {
   SubmissionFilters,
   SubmissionListItem,
 } from "../submissions.types";
+import { SubmissionFilterControls } from "./submission-filter-controls";
 
 export function SubmissionsListPage({
   mode,
@@ -46,8 +47,19 @@ export function SubmissionsListPage({
     pageSize: 20,
     search: searchParams.get("search") || undefined,
     assignmentId: assignmentId ?? searchParams.get("assignment") ?? undefined,
+    studentId: searchParams.get("student") || undefined,
+    courseId: searchParams.get("course") || undefined,
+    subjectId: searchParams.get("subject") || undefined,
     status:
       (searchParams.get("status") as SubmissionStatus | null) ?? undefined,
+    isLate: searchParams.has("late")
+      ? searchParams.get("late") === "true"
+      : undefined,
+    hasGrade: searchParams.has("graded")
+      ? searchParams.get("graded") === "true"
+      : undefined,
+    submittedFromUtc: searchParams.get("from") || undefined,
+    submittedToUtc: searchParams.get("to") || undefined,
     sortDirection: "Desc",
   };
   const [search, setSearch] = useState(filters.search ?? "");
@@ -69,6 +81,9 @@ export function SubmissionsListPage({
       cell: (item) => (
         <div>
           <p className="font-medium">{item.assignmentTitle}</p>
+          <p className="text-muted-foreground text-xs">
+            {item.courseName} · {item.subjectName}
+          </p>
           {item.isLate ? (
             <p className="text-destructive text-xs">Late</p>
           ) : null}
@@ -148,6 +163,12 @@ export function SubmissionsListPage({
             setSearch(value);
             setFilter("search", value);
           }}
+        />
+        <SubmissionFilterControls
+          assignmentLocked={Boolean(assignmentId)}
+          filters={filters}
+          mode={mode}
+          onFilterChange={setFilter}
         />
         <div className="space-y-1.5">
           <Label>Status</Label>

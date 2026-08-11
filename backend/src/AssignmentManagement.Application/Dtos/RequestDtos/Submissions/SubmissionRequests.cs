@@ -49,7 +49,15 @@ public sealed record SubmissionQueryRequest : PaginationRequest
 
     public Guid? StudentId { get; init; }
 
+    public Guid? CourseId { get; init; }
+
+    public Guid? SubjectId { get; init; }
+
     public SubmissionStatus? Status { get; init; }
+
+    public bool? IsLate { get; init; }
+
+    public bool? HasGrade { get; init; }
 
     public DateTimeOffset? SubmittedFromUtc { get; init; }
 

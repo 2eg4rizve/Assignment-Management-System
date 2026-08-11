@@ -5,6 +5,7 @@ namespace AssignmentManagement.Application.Submissions.Models;
 public sealed record SubmissionListReadModel(
     Guid Id, Guid AssignmentId, string AssignmentTitle, Guid StudentId,
     string StudentName, string StudentEmail, SubmissionStatus Status,
+    Guid CourseId, string CourseName, Guid SubjectId, string SubjectName,
     DateTimeOffset SubmittedAtUtc, DateTimeOffset LastSubmittedAtUtc,
     decimal? MarksAwarded, decimal MaximumMarks, bool IsLate);
 

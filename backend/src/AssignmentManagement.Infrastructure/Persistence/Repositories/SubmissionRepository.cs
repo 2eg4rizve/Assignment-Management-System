@@ -25,12 +25,36 @@ public sealed class SubmissionRepository : Repository<Submission>, ISubmissionRe
             query = query.Where(item => item.AssignmentId == request.AssignmentId.Value);
         if (request.StudentId.HasValue)
             query = query.Where(item => item.StudentId == request.StudentId.Value);
+        if (request.CourseId.HasValue)
+            query = query.Where(item =>
+                item.Assignment.TeachingAssignment.CourseId == request.CourseId.Value);
+        if (request.SubjectId.HasValue)
+            query = query.Where(item =>
+                item.Assignment.TeachingAssignment.SubjectId == request.SubjectId.Value);
         if (request.Status.HasValue)
             query = query.Where(item => item.Status == request.Status.Value);
+        if (request.IsLate.HasValue)
+            query = request.IsLate.Value
+                ? query.Where(item => item.LastSubmittedAtUtc > item.Assignment.DeadlineUtc)
+                : query.Where(item => item.LastSubmittedAtUtc <= item.Assignment.DeadlineUtc);
+        if (request.HasGrade.HasValue)
+            query = request.HasGrade.Value
+                ? query.Where(item => item.MarksAwarded != null)
+                : query.Where(item => item.MarksAwarded == null);
         if (request.SubmittedFromUtc.HasValue)
             query = query.Where(item => item.LastSubmittedAtUtc >= request.SubmittedFromUtc.Value);
         if (request.SubmittedToUtc.HasValue)
             query = query.Where(item => item.LastSubmittedAtUtc <= request.SubmittedToUtc.Value);
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var pattern = $"%{request.Search.Trim()}%";
+            query = query.Where(item =>
+                EF.Functions.ILike(item.Assignment.Title, pattern) ||
+                _dbContext.Users.Any(student => student.Id == item.StudentId &&
+                    (EF.Functions.ILike(student.FirstName, pattern) ||
+                     EF.Functions.ILike(student.LastName, pattern) ||
+                     EF.Functions.ILike(student.Email!, pattern))));
+        }
 
         var totalCount = await query.CountAsync(cancellationToken);
         query = request.SortDirection == SortDirection.Asc
@@ -40,7 +64,11 @@ public sealed class SubmissionRepository : Repository<Submission>, ISubmissionRe
             let student = _dbContext.Users.First(user => user.Id == item.StudentId)
             select new SubmissionListReadModel(item.Id, item.AssignmentId, item.Assignment.Title,
                 item.StudentId, (student.FirstName + " " + student.LastName).Trim(), student.Email ?? string.Empty,
-                item.Status, item.SubmittedAtUtc, item.LastSubmittedAtUtc,
+                item.Status, item.Assignment.TeachingAssignment.CourseId,
+                item.Assignment.TeachingAssignment.Course.Name,
+                item.Assignment.TeachingAssignment.SubjectId,
+                item.Assignment.TeachingAssignment.Subject.Name,
+                item.SubmittedAtUtc, item.LastSubmittedAtUtc,
                 isAdmin || isTeacher || item.Status == SubmissionStatus.Graded ? item.MarksAwarded : null,
                 item.Assignment.MaximumMarks, item.LastSubmittedAtUtc > item.Assignment.DeadlineUtc))
             .ToListAsync(cancellationToken);

@@ -16,6 +16,10 @@ export type SubmissionListItem = {
   studentName: string;
   studentEmail: string;
   status: SubmissionStatus;
+  courseId: string;
+  courseName: string;
+  subjectId: string;
+  subjectName: string;
   submittedAtUtc: string;
   lastSubmittedAtUtc: string;
   marksAwarded: number | null;
@@ -59,7 +63,13 @@ export type SubmissionFilters = {
   search?: string;
   assignmentId?: string;
   studentId?: string;
+  courseId?: string;
+  subjectId?: string;
   status?: SubmissionStatus;
+  isLate?: boolean;
+  hasGrade?: boolean;
+  submittedFromUtc?: string;
+  submittedToUtc?: string;
   sortDirection?: "Asc" | "Desc";
 };
 export type GradeSubmissionInput = {

@@ -13,8 +13,18 @@ export function getMySubmissions(filters: SubmissionFilters) {
     pageNumber: String(filters.pageNumber),
     pageSize: String(filters.pageSize),
   });
+  if (filters.search) query.set("search", filters.search);
   if (filters.assignmentId) query.set("assignmentId", filters.assignmentId);
+  if (filters.courseId) query.set("courseId", filters.courseId);
+  if (filters.subjectId) query.set("subjectId", filters.subjectId);
   if (filters.status) query.set("status", filters.status);
+  if (filters.isLate !== undefined) query.set("isLate", String(filters.isLate));
+  if (filters.hasGrade !== undefined)
+    query.set("hasGrade", String(filters.hasGrade));
+  if (filters.submittedFromUtc)
+    query.set("submittedFromUtc", filters.submittedFromUtc);
+  if (filters.submittedToUtc)
+    query.set("submittedToUtc", filters.submittedToUtc);
   if (filters.sortDirection) query.set("sortDirection", filters.sortDirection);
   return browserRequest<PagedResponse<SubmissionListItem>>(
     `/api/my-submissions?${query}`,
@@ -28,7 +38,16 @@ export function getSubmissions(filters: SubmissionFilters) {
   if (filters.search) query.set("search", filters.search);
   if (filters.assignmentId) query.set("assignmentId", filters.assignmentId);
   if (filters.studentId) query.set("studentId", filters.studentId);
+  if (filters.courseId) query.set("courseId", filters.courseId);
+  if (filters.subjectId) query.set("subjectId", filters.subjectId);
   if (filters.status) query.set("status", filters.status);
+  if (filters.isLate !== undefined) query.set("isLate", String(filters.isLate));
+  if (filters.hasGrade !== undefined)
+    query.set("hasGrade", String(filters.hasGrade));
+  if (filters.submittedFromUtc)
+    query.set("submittedFromUtc", filters.submittedFromUtc);
+  if (filters.submittedToUtc)
+    query.set("submittedToUtc", filters.submittedToUtc);
   if (filters.sortDirection) query.set("sortDirection", filters.sortDirection);
   return browserRequest<PagedResponse<SubmissionListItem>>(
     `/api/submissions?${query}`,

@@ -42,7 +42,12 @@ public sealed class DashboardRepository(ApplicationDbContext dbContext) : IDashb
             orderby item.LastSubmittedAtUtc descending
             select new SubmissionListItemResponse(item.Id, item.AssignmentId, item.Assignment.Title,
                 item.StudentId, (student.FirstName + " " + student.LastName).Trim(),
-                student.Email ?? string.Empty, item.Status, item.SubmittedAtUtc,
+                student.Email ?? string.Empty, item.Status,
+                item.Assignment.TeachingAssignment.CourseId,
+                item.Assignment.TeachingAssignment.Course.Name,
+                item.Assignment.TeachingAssignment.SubjectId,
+                item.Assignment.TeachingAssignment.Subject.Name,
+                item.SubmittedAtUtc,
                 item.LastSubmittedAtUtc, item.MarksAwarded, item.Assignment.MaximumMarks,
                 item.LastSubmittedAtUtc > item.Assignment.DeadlineUtc))
             .Take(SummaryItemCount).ToListAsync(cancellationToken);

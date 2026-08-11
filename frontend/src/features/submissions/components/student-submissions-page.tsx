@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import type { SubmissionStatus } from "@/shared/api/contracts";
 import {
   DataTable,
@@ -13,6 +14,7 @@ import { StatusBadge } from "@/shared/components/data-table/status-badge";
 import { ErrorState } from "@/shared/components/feedback/error-state";
 import { LoadingState } from "@/shared/components/feedback/loading-state";
 import { FilterBar } from "@/shared/components/filters/filter-bar";
+import { SearchInput } from "@/shared/components/filters/search-input";
 import { PageHeader } from "@/shared/components/layout/page-header";
 import { Button } from "@/shared/components/ui/button";
 import { Label } from "@/shared/components/ui/label";
@@ -28,6 +30,7 @@ import type {
   SubmissionFilters,
   SubmissionListItem,
 } from "../submissions.types";
+import { SubmissionFilterControls } from "./submission-filter-controls";
 
 const columns: readonly DataTableColumn<SubmissionListItem>[] = [
   {
@@ -36,6 +39,9 @@ const columns: readonly DataTableColumn<SubmissionListItem>[] = [
     cell: (item) => (
       <div>
         <p className="font-medium">{item.assignmentTitle}</p>
+        <p className="text-muted-foreground text-xs">
+          {item.courseName} · {item.subjectName}
+        </p>
         {item.isLate ? (
           <p className="text-destructive text-xs">Submitted late</p>
         ) : null}
@@ -86,10 +92,23 @@ export function StudentSubmissionsPage() {
   const filters: SubmissionFilters = {
     pageNumber: Math.max(Number(searchParams.get("page")) || 1, 1),
     pageSize: 20,
+    search: searchParams.get("search") || undefined,
+    assignmentId: searchParams.get("assignment") || undefined,
+    courseId: searchParams.get("course") || undefined,
+    subjectId: searchParams.get("subject") || undefined,
     status:
       (searchParams.get("status") as SubmissionStatus | null) ?? undefined,
+    isLate: searchParams.has("late")
+      ? searchParams.get("late") === "true"
+      : undefined,
+    hasGrade: searchParams.has("graded")
+      ? searchParams.get("graded") === "true"
+      : undefined,
+    submittedFromUtc: searchParams.get("from") || undefined,
+    submittedToUtc: searchParams.get("to") || undefined,
     sortDirection: "Desc",
   };
+  const [search, setSearch] = useState(filters.search ?? "");
   const query = useQuery({
     queryKey: ["submissions", "student-list", filters],
     queryFn: () => getMySubmissions(filters),
@@ -109,6 +128,19 @@ export function StudentSubmissionsPage() {
         description="Review your submitted answers, statuses, marks, and published feedback."
       />
       <FilterBar>
+        <SearchInput
+          value={search}
+          placeholder="Search assignments"
+          onValueChange={(value) => {
+            setSearch(value);
+            setFilter("search", value);
+          }}
+        />
+        <SubmissionFilterControls
+          filters={filters}
+          mode="student"
+          onFilterChange={setFilter}
+        />
         <div className="space-y-1.5">
           <Label>Status</Label>
           <Select

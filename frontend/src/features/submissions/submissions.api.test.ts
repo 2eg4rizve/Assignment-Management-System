@@ -16,11 +16,18 @@ describe("student submissions API", () => {
     await getMySubmissions({
       pageNumber: 2,
       pageSize: 20,
+      search: "database",
+      courseId: "course-1",
+      subjectId: "subject-1",
       status: "Graded",
+      isLate: false,
+      hasGrade: true,
+      submittedFromUtc: "2026-08-01T00:00:00.000Z",
+      submittedToUtc: "2026-08-31T23:59:59.999Z",
       sortDirection: "Desc",
     });
     expect(fetchMock.mock.calls[0][0]).toBe(
-      "/api/my-submissions?pageNumber=2&pageSize=20&status=Graded&sortDirection=Desc",
+      "/api/my-submissions?pageNumber=2&pageSize=20&search=database&courseId=course-1&subjectId=subject-1&status=Graded&isLate=false&hasGrade=true&submittedFromUtc=2026-08-01T00%3A00%3A00.000Z&submittedToUtc=2026-08-31T23%3A59%3A59.999Z&sortDirection=Desc",
     );
   });
   it("creates an initial submission", async () => {
@@ -77,11 +84,16 @@ describe("student submissions API", () => {
       pageNumber: 1,
       pageSize: 20,
       assignmentId: "assignment-1",
+      studentId: "student-1",
+      courseId: "course-1",
+      subjectId: "subject-1",
       status: "UnderReview",
+      isLate: true,
+      hasGrade: false,
       sortDirection: "Desc",
     });
     expect(fetchMock.mock.calls[0][0]).toBe(
-      "/api/submissions?pageNumber=1&pageSize=20&assignmentId=assignment-1&status=UnderReview&sortDirection=Desc",
+      "/api/submissions?pageNumber=1&pageSize=20&assignmentId=assignment-1&studentId=student-1&courseId=course-1&subjectId=subject-1&status=UnderReview&isLate=true&hasGrade=false&sortDirection=Desc",
     );
   });
   it("carries row versions through review and grade mutations", async () => {
