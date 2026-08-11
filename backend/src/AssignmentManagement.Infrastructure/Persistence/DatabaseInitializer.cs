@@ -35,7 +35,7 @@ public static class DatabaseInitializer
         var admin = await EnsureUserAsync(userManager, "admin@assignment.local", "Demo", "Admin",
             "Admin", options.Password);
         var teacher = await EnsureUserAsync(userManager, "teacher@assignment.local", "Demo", "Teacher",
-            "Teacher", options.Password);
+            "Teacher", options.Password, teacherCode: "T-DEMO-26-001");
         var student = await EnsureUserAsync(userManager, "student@assignment.local", "Demo", "Student",
             "Student", options.Password, "DEMO-26-01-001");
         await SeedAcademicDataAsync(dbContext, admin.Id, teacher.Id, student.Id, cancellationToken);
@@ -43,7 +43,7 @@ public static class DatabaseInitializer
 
     private static async Task<ApplicationUser> EnsureUserAsync(UserManager<ApplicationUser> userManager,
         string email, string firstName, string lastName, string role, string password,
-        string? studentCode = null)
+        string? studentCode = null, string? teacherCode = null)
     {
         var user = await userManager.FindByEmailAsync(email);
         if (user is null)
@@ -56,6 +56,7 @@ public static class DatabaseInitializer
                 FirstName = firstName,
                 LastName = lastName,
                 StudentCode = studentCode,
+                TeacherCode = teacherCode,
                 IsActive = true,
                 CreatedAtUtc = DateTimeOffset.UtcNow
             };
@@ -65,6 +66,12 @@ public static class DatabaseInitializer
         if (studentCode is not null && user.StudentCode != studentCode)
         {
             user.StudentCode = studentCode;
+            EnsureSucceeded(await userManager.UpdateAsync(user));
+        }
+
+        if (teacherCode is not null && user.TeacherCode != teacherCode)
+        {
+            user.TeacherCode = teacherCode;
             EnsureSucceeded(await userManager.UpdateAsync(user));
         }
 

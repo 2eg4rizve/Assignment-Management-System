@@ -23,6 +23,12 @@ public sealed class ApplicationUserConfiguration : IEntityTypeConfiguration<Appl
         builder.HasIndex(user => user.StudentCode)
             .IsUnique();
 
+        builder.Property(user => user.TeacherCode)
+            .HasMaxLength(30);
+
+        builder.HasIndex(user => user.TeacherCode)
+            .IsUnique();
+
         builder.Property(user => user.IsActive)
             .HasDefaultValue(true);
     }

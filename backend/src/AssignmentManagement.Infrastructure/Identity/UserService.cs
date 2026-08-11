@@ -43,7 +43,8 @@ public sealed class UserService(
                 EF.Functions.ILike(user.FirstName, pattern) ||
                 EF.Functions.ILike(user.LastName, pattern) ||
                 EF.Functions.ILike(user.Email!, pattern) ||
-                (user.StudentCode != null && EF.Functions.ILike(user.StudentCode, pattern)));
+                (user.StudentCode != null && EF.Functions.ILike(user.StudentCode, pattern)) ||
+                (user.TeacherCode != null && EF.Functions.ILike(user.TeacherCode, pattern)));
         }
 
         var totalCount = await query.CountAsync(cancellationToken);
@@ -63,6 +64,7 @@ public sealed class UserService(
                 FullName(user),
                 user.Email ?? string.Empty,
                 user.StudentCode,
+                user.TeacherCode,
                 roles,
                 user.IsActive,
                 user.CreatedAtUtc));
@@ -88,12 +90,16 @@ public sealed class UserService(
     {
         EnsureValidRole(request.Role);
         var studentCode = NormalizeStudentCode(request.StudentCode, request.Role);
+        var teacherCode = NormalizeTeacherCode(request.TeacherCode, request.Role);
         var email = request.Email.Trim();
         if (await userManager.FindByEmailAsync(email) is not null)
             throw new ConflictException("A user with this email address already exists.");
         if (studentCode is not null && await dbContext.Users.AnyAsync(
                 user => user.StudentCode == studentCode, cancellationToken))
             throw new ConflictException("A user with this student ID already exists.");
+        if (teacherCode is not null && await dbContext.Users.AnyAsync(
+                user => user.TeacherCode == teacherCode, cancellationToken))
+            throw new ConflictException("A user with this teacher ID already exists.");
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         var user = new ApplicationUser
@@ -104,6 +110,7 @@ public sealed class UserService(
             Email = email,
             UserName = email,
             StudentCode = studentCode,
+            TeacherCode = teacherCode,
             IsActive = true,
             CreatedAtUtc = dateTimeProvider.UtcNow
         };
@@ -120,6 +127,7 @@ public sealed class UserService(
     {
         EnsureValidRole(request.Role);
         var studentCode = NormalizeStudentCode(request.StudentCode, request.Role);
+        var teacherCode = NormalizeTeacherCode(request.TeacherCode, request.Role);
         var user = await userManager.FindByIdAsync(id.ToString())
             ?? throw new NotFoundException(nameof(ApplicationUser), id);
         var email = request.Email.Trim();
@@ -129,6 +137,9 @@ public sealed class UserService(
         if (studentCode is not null && await dbContext.Users.AnyAsync(
                 value => value.StudentCode == studentCode && value.Id != id, cancellationToken))
             throw new ConflictException("A user with this student ID already exists.");
+        if (teacherCode is not null && await dbContext.Users.AnyAsync(
+                value => value.TeacherCode == teacherCode && value.Id != id, cancellationToken))
+            throw new ConflictException("A user with this teacher ID already exists.");
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         user.FirstName = request.FirstName.Trim();
@@ -136,6 +147,7 @@ public sealed class UserService(
         user.Email = email;
         user.UserName = email;
         user.StudentCode = studentCode;
+        user.TeacherCode = teacherCode;
         user.IsActive = request.IsActive;
         user.UpdatedAtUtc = dateTimeProvider.UtcNow;
 
@@ -172,6 +184,7 @@ public sealed class UserService(
             FullName(user),
             user.Email ?? string.Empty,
             user.StudentCode,
+            user.TeacherCode,
             await GetRolesAsync(user),
             user.IsActive,
             user.CreatedAtUtc,
@@ -196,6 +209,14 @@ public sealed class UserService(
         if (role != UserRole.Student) return null;
         if (string.IsNullOrWhiteSpace(value))
             throw new ValidationException("Student ID is required for students.");
+        return value.Trim().ToUpperInvariant();
+    }
+
+    private static string? NormalizeTeacherCode(string? value, UserRole role)
+    {
+        if (role != UserRole.Teacher) return null;
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ValidationException("Teacher ID is required for teachers.");
         return value.Trim().ToUpperInvariant();
     }
 

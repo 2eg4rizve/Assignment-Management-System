@@ -118,7 +118,7 @@ export function TeachingAssignmentForm({
       placeholder: "Select teacher",
       options: options.teachers.data!.items.map((x) => ({
         id: x.id,
-        label: `${x.fullName} · ${x.email}`,
+        label: [x.teacherCode, x.fullName, x.email].filter(Boolean).join(" · "),
       })),
     },
     {

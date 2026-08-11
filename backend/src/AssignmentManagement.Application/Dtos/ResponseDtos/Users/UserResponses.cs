@@ -7,6 +7,7 @@ public sealed record UserListItemResponse(
     string FullName,
     string Email,
     string? StudentCode,
+    string? TeacherCode,
     IReadOnlyCollection<UserRole> Roles,
     bool IsActive,
     DateTimeOffset CreatedAtUtc);
@@ -18,6 +19,7 @@ public sealed record UserDetailResponse(
     string FullName,
     string Email,
     string? StudentCode,
+    string? TeacherCode,
     IReadOnlyCollection<UserRole> Roles,
     bool IsActive,
     DateTimeOffset CreatedAtUtc,

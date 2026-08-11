@@ -51,7 +51,11 @@ export function UserDetailPage({ id }: { id: string }) {
             />
           </>
         }
-        description={[query.data.email, query.data.studentCode]
+        description={[
+          query.data.email,
+          query.data.studentCode,
+          query.data.teacherCode,
+        ]
           .filter(Boolean)
           .join(" · ")}
         eyebrow={query.data.roles.join(", ")}

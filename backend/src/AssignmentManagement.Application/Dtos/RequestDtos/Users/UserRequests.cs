@@ -26,6 +26,10 @@ public sealed record CreateUserRequest
     [StringLength(30), RegularExpression(StudentCodePattern,
         ErrorMessage = "Student ID must use a format such as CSE-26-03-001.")]
     public string? StudentCode { get; init; }
+
+    [StringLength(30), RegularExpression(@"^T-[A-Za-z]{1,10}-\d{2}-\d{3,5}$",
+        ErrorMessage = "Teacher ID must use a format such as T-CSE-26-001.")]
+    public string? TeacherCode { get; init; }
 }
 
 public sealed record UpdateUserRequest
@@ -46,6 +50,10 @@ public sealed record UpdateUserRequest
     [StringLength(30), RegularExpression(StudentCodePattern,
         ErrorMessage = "Student ID must use a format such as CSE-26-03-001.")]
     public string? StudentCode { get; init; }
+
+    [StringLength(30), RegularExpression(@"^T-[A-Za-z]{1,10}-\d{2}-\d{3,5}$",
+        ErrorMessage = "Teacher ID must use a format such as T-CSE-26-001.")]
+    public string? TeacherCode { get; init; }
 
     public bool IsActive { get; init; }
 }

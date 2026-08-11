@@ -57,7 +57,10 @@ public sealed class AssignmentRepository : Repository<DomainAssignment>, IAssign
             query = query.Where(item => EF.Functions.ILike(item.Title, pattern) ||
                 EF.Functions.ILike(item.Description, pattern) ||
                 EF.Functions.ILike(item.TeachingAssignment.Course.Name, pattern) ||
-                EF.Functions.ILike(item.TeachingAssignment.Subject.Name, pattern));
+                EF.Functions.ILike(item.TeachingAssignment.Subject.Name, pattern) ||
+                _dbContext.Users.Any(teacher =>
+                    teacher.Id == item.TeachingAssignment.TeacherId &&
+                    teacher.TeacherCode != null && EF.Functions.ILike(teacher.TeacherCode, pattern)));
         }
 
         var totalCount = await query.CountAsync(cancellationToken);

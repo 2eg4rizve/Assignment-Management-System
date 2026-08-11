@@ -8,24 +8,49 @@ const userFields = {
   lastName: z.string().trim().min(1, "Last name is required.").max(100),
   role: userRoleSchema,
   studentCode: z.string().trim().max(30).optional(),
+  teacherCode: z.string().trim().max(30).optional(),
 };
 
-const validateStudentCode = (
-  value: { role: z.infer<typeof userRoleSchema>; studentCode?: string },
+const validateRoleCodes = (
+  value: {
+    role: z.infer<typeof userRoleSchema>;
+    studentCode?: string;
+    teacherCode?: string;
+  },
   context: z.RefinementCtx,
 ) => {
-  if (value.role !== "Student") return;
-  if (!value.studentCode) {
+  if (value.role === "Student" && !value.studentCode) {
     context.addIssue({
       code: "custom",
       path: ["studentCode"],
       message: "Student ID is required.",
     });
-  } else if (!/^[A-Za-z]{1,10}-\d{2}-\d{2}-\d{3,5}$/.test(value.studentCode)) {
+  } else if (
+    value.role === "Student" &&
+    value.studentCode &&
+    !/^[A-Za-z]{1,10}-\d{2}-\d{2}-\d{3,5}$/.test(value.studentCode)
+  ) {
     context.addIssue({
       code: "custom",
       path: ["studentCode"],
       message: "Use a format such as CSE-26-03-001.",
+    });
+  }
+  if (value.role === "Teacher" && !value.teacherCode) {
+    context.addIssue({
+      code: "custom",
+      path: ["teacherCode"],
+      message: "Teacher ID is required.",
+    });
+  } else if (
+    value.role === "Teacher" &&
+    value.teacherCode &&
+    !/^T-[A-Za-z]{1,10}-\d{2}-\d{3,5}$/.test(value.teacherCode)
+  ) {
+    context.addIssue({
+      code: "custom",
+      path: ["teacherCode"],
+      message: "Use a format such as T-CSE-26-001.",
     });
   }
 };
@@ -35,14 +60,14 @@ export const createUserSchema = z
     ...userFields,
     password: z.string().min(8, "Password must be at least 8 characters."),
   })
-  .superRefine(validateStudentCode);
+  .superRefine(validateRoleCodes);
 
 export const updateUserSchema = z
   .object({
     ...userFields,
     isActive: z.boolean(),
   })
-  .superRefine(validateStudentCode);
+  .superRefine(validateRoleCodes);
 
 export const resetPasswordSchema = z.object({
   newPassword: z.string().min(8, "Password must be at least 8 characters."),

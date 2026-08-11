@@ -44,6 +44,9 @@ const columns: readonly DataTableColumn<UserListItem>[] = [
         {user.studentCode ? (
           <p className="text-muted-foreground text-xs">{user.studentCode}</p>
         ) : null}
+        {user.teacherCode ? (
+          <p className="text-muted-foreground text-xs">{user.teacherCode}</p>
+        ) : null}
       </div>
     ),
   },
@@ -131,7 +134,7 @@ export function UsersPage() {
             setSearch(value);
             setFilter("search", value);
           }}
-          placeholder="Search name, email or student ID"
+          placeholder="Search name, email or institutional ID"
           value={search}
         />
         <div className="space-y-1.5">

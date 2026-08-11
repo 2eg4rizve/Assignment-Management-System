@@ -49,6 +49,7 @@ export function CreateUserDialog({
       password: "",
       role: "Student",
       studentCode: "",
+      teacherCode: "",
     },
     resolver: zodResolver(createUserSchema),
   });
@@ -92,6 +93,7 @@ export function CreateUserDialog({
               lastName: errors.lastName?.message,
               role: errors.role?.message,
               studentCode: errors.studentCode?.message,
+              teacherCode: errors.teacherCode?.message,
             }}
             register={(name) => register(name)}
             role={role}

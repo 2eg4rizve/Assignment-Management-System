@@ -25,4 +25,16 @@ describe("createUserSchema", () => {
         .success,
     ).toBe(false);
   });
+
+  it("requires a structured teacher ID for teacher accounts", () => {
+    const teacher = { ...student, role: "Teacher" as const };
+    expect(
+      createUserSchema.safeParse({ ...teacher, teacherCode: "T-CSE-26-001" })
+        .success,
+    ).toBe(true);
+    expect(createUserSchema.safeParse(teacher).success).toBe(false);
+    expect(
+      createUserSchema.safeParse({ ...teacher, teacherCode: "T26001" }).success,
+    ).toBe(false);
+  });
 });

@@ -5,6 +5,7 @@ export type UserListItem = {
   fullName: string;
   email: string;
   studentCode: string | null;
+  teacherCode: string | null;
   roles: UserRole[];
   isActive: boolean;
   createdAtUtc: string;
@@ -23,6 +24,7 @@ export type CreateUserInput = {
   password: string;
   role: UserRole;
   studentCode?: string;
+  teacherCode?: string;
 };
 
 export type UpdateUserInput = Omit<CreateUserInput, "password"> & {

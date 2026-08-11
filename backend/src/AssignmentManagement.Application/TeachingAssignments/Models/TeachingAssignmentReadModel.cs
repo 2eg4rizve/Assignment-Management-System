@@ -6,6 +6,7 @@ public sealed record TeachingAssignmentReadModel
     public required Guid TeacherId { get; init; }
     public required string TeacherFullName { get; init; }
     public required string TeacherEmail { get; init; }
+    public string? TeacherCode { get; init; }
     public required Guid CourseId { get; init; }
     public required string CourseCode { get; init; }
     public required string CourseName { get; init; }

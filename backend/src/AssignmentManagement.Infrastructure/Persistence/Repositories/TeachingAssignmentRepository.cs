@@ -74,6 +74,7 @@ public sealed class TeachingAssignmentRepository : Repository<TeachingAssignment
             query = query.Where(item =>
                 EF.Functions.ILike(item.TeacherFullName, pattern) ||
                 EF.Functions.ILike(item.TeacherEmail, pattern) ||
+                (item.TeacherCode != null && EF.Functions.ILike(item.TeacherCode, pattern)) ||
                 EF.Functions.ILike(item.CourseCode, pattern) ||
                 EF.Functions.ILike(item.CourseName, pattern) ||
                 EF.Functions.ILike(item.SubjectCode, pattern) ||
@@ -100,6 +101,7 @@ public sealed class TeachingAssignmentRepository : Repository<TeachingAssignment
             TeacherId = teacher.Id,
             TeacherFullName = (teacher.FirstName + " " + teacher.LastName).Trim(),
             TeacherEmail = teacher.Email ?? string.Empty,
+            TeacherCode = teacher.TeacherCode,
             CourseId = item.Course.Id,
             CourseCode = item.Course.Code,
             CourseName = item.Course.Name,
