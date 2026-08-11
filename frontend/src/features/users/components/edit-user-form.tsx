@@ -35,6 +35,7 @@ export function EditUserForm({
       isActive: user.isActive,
       lastName: user.lastName,
       role: user.roles[0] ?? "Student",
+      studentCode: user.studentCode ?? "",
     },
     resolver: zodResolver(updateUserSchema),
   });
@@ -69,6 +70,7 @@ export function EditUserForm({
           firstName: errors.firstName?.message,
           lastName: errors.lastName?.message,
           role: errors.role?.message,
+          studentCode: errors.studentCode?.message,
         }}
         register={(name) => register(name)}
         role={role}

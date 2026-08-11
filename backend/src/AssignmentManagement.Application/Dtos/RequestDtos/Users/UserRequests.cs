@@ -7,6 +7,7 @@ namespace AssignmentManagement.Application.Dtos.RequestDtos.Users;
 
 public sealed record CreateUserRequest
 {
+    private const string StudentCodePattern = @"^[A-Za-z]{1,10}-\d{2}-\d{2}-\d{3,5}$";
     [Required, StringLength(ValidationConstants.NameMaxLength)]
     public string FirstName { get; init; } = string.Empty;
 
@@ -21,10 +22,15 @@ public sealed record CreateUserRequest
 
     [EnumDataType(typeof(UserRole))]
     public UserRole Role { get; init; }
+
+    [StringLength(30), RegularExpression(StudentCodePattern,
+        ErrorMessage = "Student ID must use a format such as CSE-26-03-001.")]
+    public string? StudentCode { get; init; }
 }
 
 public sealed record UpdateUserRequest
 {
+    private const string StudentCodePattern = @"^[A-Za-z]{1,10}-\d{2}-\d{2}-\d{3,5}$";
     [Required, StringLength(ValidationConstants.NameMaxLength)]
     public string FirstName { get; init; } = string.Empty;
 
@@ -36,6 +42,10 @@ public sealed record UpdateUserRequest
 
     [EnumDataType(typeof(UserRole))]
     public UserRole Role { get; init; }
+
+    [StringLength(30), RegularExpression(StudentCodePattern,
+        ErrorMessage = "Student ID must use a format such as CSE-26-03-001.")]
+    public string? StudentCode { get; init; }
 
     public bool IsActive { get; init; }
 }

@@ -65,6 +65,7 @@ public sealed class CourseEnrollmentRepository : Repository<CourseEnrollment>, I
             query = query.Where(item =>
                 EF.Functions.ILike(item.StudentFullName, pattern) ||
                 EF.Functions.ILike(item.StudentEmail, pattern) ||
+                (item.StudentCode != null && EF.Functions.ILike(item.StudentCode, pattern)) ||
                 EF.Functions.ILike(item.CourseCode, pattern) ||
                 EF.Functions.ILike(item.CourseName, pattern));
         }
@@ -88,6 +89,7 @@ public sealed class CourseEnrollmentRepository : Repository<CourseEnrollment>, I
             StudentId = student.Id,
             StudentFullName = (student.FirstName + " " + student.LastName).Trim(),
             StudentEmail = student.Email ?? string.Empty,
+            StudentCode = student.StudentCode,
             CourseId = item.Course.Id,
             CourseCode = item.Course.Code,
             CourseName = item.Course.Name,

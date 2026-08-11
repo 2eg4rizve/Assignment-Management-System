@@ -16,6 +16,7 @@ type UserFields = {
   firstName: string;
   lastName: string;
   role: UserRole;
+  studentCode?: string;
 };
 
 type UserFieldName = keyof UserFields;
@@ -50,6 +51,24 @@ export function UserFormFields({
           <Input id="email" type="email" {...register("email")} />
         </FormField>
       </div>
+      {role === "Student" ? (
+        <div className="sm:col-span-2">
+          <FormField
+            error={errors.studentCode}
+            htmlFor="studentCode"
+            label="Student ID"
+          >
+            <Input
+              id="studentCode"
+              placeholder="CSE-26-03-001"
+              {...register("studentCode")}
+            />
+          </FormField>
+          <p className="text-muted-foreground mt-1 text-xs">
+            Program – admission year – semester – serial number
+          </p>
+        </div>
+      ) : null}
       <div className="space-y-2 sm:col-span-2">
         <Label>Role</Label>
         <Select

@@ -17,6 +17,12 @@ public sealed class ApplicationUserConfiguration : IEntityTypeConfiguration<Appl
             .HasMaxLength(ValidationConstants.NameMaxLength)
             .IsRequired();
 
+        builder.Property(user => user.StudentCode)
+            .HasMaxLength(30);
+
+        builder.HasIndex(user => user.StudentCode)
+            .IsUnique();
+
         builder.Property(user => user.IsActive)
             .HasDefaultValue(true);
     }

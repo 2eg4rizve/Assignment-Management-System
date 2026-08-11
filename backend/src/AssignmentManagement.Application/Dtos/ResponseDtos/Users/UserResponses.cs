@@ -6,6 +6,7 @@ public sealed record UserListItemResponse(
     Guid Id,
     string FullName,
     string Email,
+    string? StudentCode,
     IReadOnlyCollection<UserRole> Roles,
     bool IsActive,
     DateTimeOffset CreatedAtUtc);
@@ -16,6 +17,7 @@ public sealed record UserDetailResponse(
     string LastName,
     string FullName,
     string Email,
+    string? StudentCode,
     IReadOnlyCollection<UserRole> Roles,
     bool IsActive,
     DateTimeOffset CreatedAtUtc,

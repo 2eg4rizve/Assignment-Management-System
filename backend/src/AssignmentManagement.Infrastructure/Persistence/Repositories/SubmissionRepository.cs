@@ -59,7 +59,8 @@ public sealed class SubmissionRepository : Repository<Submission>, ISubmissionRe
                 _dbContext.Users.Any(student => student.Id == item.StudentId &&
                     (EF.Functions.ILike(student.FirstName, pattern) ||
                      EF.Functions.ILike(student.LastName, pattern) ||
-                     EF.Functions.ILike(student.Email!, pattern))));
+                     EF.Functions.ILike(student.Email!, pattern) ||
+                     (student.StudentCode != null && EF.Functions.ILike(student.StudentCode, pattern)))));
         }
 
         var totalCount = await query.CountAsync(cancellationToken);

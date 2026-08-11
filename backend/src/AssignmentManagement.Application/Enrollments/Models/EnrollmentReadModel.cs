@@ -6,6 +6,7 @@ public sealed record EnrollmentReadModel
     public required Guid StudentId { get; init; }
     public required string StudentFullName { get; init; }
     public required string StudentEmail { get; init; }
+    public string? StudentCode { get; init; }
     public required Guid CourseId { get; init; }
     public required string CourseCode { get; init; }
     public required string CourseName { get; init; }

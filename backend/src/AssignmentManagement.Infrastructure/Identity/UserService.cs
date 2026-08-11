@@ -42,7 +42,8 @@ public sealed class UserService(
             query = query.Where(user =>
                 EF.Functions.ILike(user.FirstName, pattern) ||
                 EF.Functions.ILike(user.LastName, pattern) ||
-                EF.Functions.ILike(user.Email!, pattern));
+                EF.Functions.ILike(user.Email!, pattern) ||
+                (user.StudentCode != null && EF.Functions.ILike(user.StudentCode, pattern)));
         }
 
         var totalCount = await query.CountAsync(cancellationToken);
@@ -61,6 +62,7 @@ public sealed class UserService(
                 user.Id,
                 FullName(user),
                 user.Email ?? string.Empty,
+                user.StudentCode,
                 roles,
                 user.IsActive,
                 user.CreatedAtUtc));
@@ -85,9 +87,13 @@ public sealed class UserService(
         CancellationToken cancellationToken = default)
     {
         EnsureValidRole(request.Role);
+        var studentCode = NormalizeStudentCode(request.StudentCode, request.Role);
         var email = request.Email.Trim();
         if (await userManager.FindByEmailAsync(email) is not null)
             throw new ConflictException("A user with this email address already exists.");
+        if (studentCode is not null && await dbContext.Users.AnyAsync(
+                user => user.StudentCode == studentCode, cancellationToken))
+            throw new ConflictException("A user with this student ID already exists.");
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         var user = new ApplicationUser
@@ -97,6 +103,7 @@ public sealed class UserService(
             LastName = request.LastName.Trim(),
             Email = email,
             UserName = email,
+            StudentCode = studentCode,
             IsActive = true,
             CreatedAtUtc = dateTimeProvider.UtcNow
         };
@@ -112,18 +119,23 @@ public sealed class UserService(
         CancellationToken cancellationToken = default)
     {
         EnsureValidRole(request.Role);
+        var studentCode = NormalizeStudentCode(request.StudentCode, request.Role);
         var user = await userManager.FindByIdAsync(id.ToString())
             ?? throw new NotFoundException(nameof(ApplicationUser), id);
         var email = request.Email.Trim();
         var userWithEmail = await userManager.FindByEmailAsync(email);
         if (userWithEmail is not null && userWithEmail.Id != id)
             throw new ConflictException("A user with this email address already exists.");
+        if (studentCode is not null && await dbContext.Users.AnyAsync(
+                value => value.StudentCode == studentCode && value.Id != id, cancellationToken))
+            throw new ConflictException("A user with this student ID already exists.");
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         user.FirstName = request.FirstName.Trim();
         user.LastName = request.LastName.Trim();
         user.Email = email;
         user.UserName = email;
+        user.StudentCode = studentCode;
         user.IsActive = request.IsActive;
         user.UpdatedAtUtc = dateTimeProvider.UtcNow;
 
@@ -159,6 +171,7 @@ public sealed class UserService(
             user.LastName,
             FullName(user),
             user.Email ?? string.Empty,
+            user.StudentCode,
             await GetRolesAsync(user),
             user.IsActive,
             user.CreatedAtUtc,
@@ -176,6 +189,14 @@ public sealed class UserService(
     {
         if (!Enum.IsDefined(role))
             throw new ValidationException("Role must be Admin, Teacher, or Student.");
+    }
+
+    private static string? NormalizeStudentCode(string? value, UserRole role)
+    {
+        if (role != UserRole.Student) return null;
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ValidationException("Student ID is required for students.");
+        return value.Trim().ToUpperInvariant();
     }
 
     private static void EnsureIdentitySucceeded(IdentityResult result)

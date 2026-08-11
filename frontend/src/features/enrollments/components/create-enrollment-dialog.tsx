@@ -66,7 +66,9 @@ export function CreateEnrollmentDialog({
             placeholder: "Select student",
             options: options.students.data.items.map((x) => ({
               id: x.id,
-              label: `${x.fullName} · ${x.email}`,
+              label: [x.studentCode, x.fullName, x.email]
+                .filter(Boolean)
+                .join(" · "),
             })),
           },
           {
