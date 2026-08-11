@@ -101,19 +101,12 @@ public sealed class UserService(
         CancellationToken cancellationToken = default)
     {
         EnsureValidRole(request.Role);
-        var studentCode = NormalizeStudentCode(request.StudentCode, request.Role);
-        var teacherCode = NormalizeTeacherCode(request.TeacherCode, request.Role);
         var email = request.Email.Trim();
         if (await userManager.FindByEmailAsync(email) is not null)
             throw new ConflictException("A user with this email address already exists.");
-        if (studentCode is not null && await dbContext.Users.AnyAsync(
-                user => user.StudentCode == studentCode, cancellationToken))
-            throw new ConflictException("A user with this student ID already exists.");
-        if (teacherCode is not null && await dbContext.Users.AnyAsync(
-                user => user.TeacherCode == teacherCode, cancellationToken))
-            throw new ConflictException("A user with this teacher ID already exists.");
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+        var generatedCode = await GenerateInstitutionCodeAsync(request, cancellationToken);
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid(),
@@ -121,8 +114,8 @@ public sealed class UserService(
             LastName = request.LastName.Trim(),
             Email = email,
             UserName = email,
-            StudentCode = studentCode,
-            TeacherCode = teacherCode,
+            StudentCode = request.Role == UserRole.Student ? generatedCode : null,
+            TeacherCode = request.Role == UserRole.Teacher ? generatedCode : null,
             IsActive = true,
             CreatedAtUtc = dateTimeProvider.UtcNow
         };
@@ -130,6 +123,56 @@ public sealed class UserService(
         EnsureIdentitySucceeded(await userManager.AddToRoleAsync(user, request.Role.ToString()));
         await transaction.CommitAsync(cancellationToken);
         return await GetByIdAsync(user.Id, cancellationToken);
+    }
+
+    private async Task<string?> GenerateInstitutionCodeAsync(
+        CreateUserRequest request, CancellationToken cancellationToken)
+    {
+        if (request.Role == UserRole.Admin) return null;
+        if (string.IsNullOrWhiteSpace(request.CodeYear) ||
+            string.IsNullOrWhiteSpace(request.CodeSemester))
+            throw new ValidationException("Year and semester are required to generate the ID.");
+
+        string prefix;
+        if (request.Role == UserRole.Student)
+        {
+            if (!request.StudentCourseId.HasValue)
+                throw new ValidationException("Course is required to generate a student ID.");
+            var courseCode = await dbContext.Courses
+                .Where(course => course.Id == request.StudentCourseId.Value && course.IsActive)
+                .Select(course => course.Code)
+                .SingleOrDefaultAsync(cancellationToken)
+                ?? throw new ValidationException("Select an active course for the student ID.");
+            prefix = new string(courseCode.Where(char.IsLetterOrDigit).ToArray()).ToUpperInvariant();
+            if (string.IsNullOrEmpty(prefix))
+                throw new ValidationException("The selected course does not have a usable code.");
+        }
+        else
+        {
+            prefix = "T";
+        }
+
+        var stem = $"{prefix}{request.CodeYear}{request.CodeSemester}";
+        if (stem.Length + 2 > 30)
+            throw new ValidationException("The generated ID exceeds the maximum length.");
+        if (dbContext.Database.IsNpgsql())
+            await dbContext.Database.ExecuteSqlInterpolatedAsync(
+                $"SELECT pg_advisory_xact_lock(hashtext({stem}))", cancellationToken);
+
+        var existingCodes = request.Role == UserRole.Student
+            ? await dbContext.Users.Where(user => user.StudentCode != null &&
+                    user.StudentCode.StartsWith(stem))
+                .Select(user => user.StudentCode!).ToListAsync(cancellationToken)
+            : await dbContext.Users.Where(user => user.TeacherCode != null &&
+                    user.TeacherCode.StartsWith(stem))
+                .Select(user => user.TeacherCode!).ToListAsync(cancellationToken);
+        var lastSerial = existingCodes
+            .Select(code => int.TryParse(code[stem.Length..], out var serial) ? serial : 0)
+            .DefaultIfEmpty(0)
+            .Max();
+        if (lastSerial >= 99)
+            throw new ValidationException("No serial numbers remain for this ID group.");
+        return $"{stem}{lastSerial + 1:00}";
     }
 
     public async Task<UserDetailResponse> UpdateAsync(

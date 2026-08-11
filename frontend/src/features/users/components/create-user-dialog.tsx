@@ -1,11 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import { Button } from "@/shared/components/ui/button";
+import { getCourses } from "@/features/courses/courses.api";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +18,14 @@ import {
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
 
 import { createUserSchema } from "../users.schema";
 import type { CreateUserInput, UserDetail } from "../users.types";
@@ -33,6 +43,11 @@ export function CreateUserDialog({
 }: CreateUserDialogProps) {
   const [open, setOpen] = useState(false);
   const [formError, setFormError] = useState<string>();
+  const courses = useQuery({
+    queryKey: ["courses", "student-id-options"],
+    queryFn: () => getCourses({ pageNumber: 1, pageSize: 100, isActive: true }),
+    enabled: open,
+  });
   const {
     formState: { errors, isSubmitting },
     control,
@@ -48,8 +63,9 @@ export function CreateUserDialog({
       lastName: "",
       password: "",
       role: "Student",
-      studentCode: "",
-      teacherCode: "",
+      studentCourseId: "",
+      codeYear: "",
+      codeSemester: "",
     },
     resolver: zodResolver(createUserSchema),
   });
@@ -92,13 +108,65 @@ export function CreateUserDialog({
               firstName: errors.firstName?.message,
               lastName: errors.lastName?.message,
               role: errors.role?.message,
-              studentCode: errors.studentCode?.message,
-              teacherCode: errors.teacherCode?.message,
             }}
             register={(name) => register(name)}
             role={role}
             setRole={(role) => setValue("role", role)}
           />
+          {role === "Student" ? (
+            <div className="space-y-2">
+              <Label>Course for Student ID</Label>
+              <Select
+                onValueChange={(value) => setValue("studentCourseId", value)}
+              >
+                <SelectTrigger aria-label="Course for Student ID">
+                  <SelectValue placeholder="Select course" />
+                </SelectTrigger>
+                <SelectContent>
+                  {courses.data?.items.map((course) => (
+                    <SelectItem key={course.id} value={course.id}>
+                      {course.code} · {course.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.studentCourseId ? (
+                <p className="text-destructive text-sm">
+                  {errors.studentCourseId.message}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+          {role !== "Admin" ? (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormField
+                error={errors.codeYear?.message}
+                htmlFor="codeYear"
+                label={role === "Student" ? "Admission year" : "Joining year"}
+              >
+                <Input
+                  id="codeYear"
+                  inputMode="numeric"
+                  maxLength={2}
+                  placeholder="26"
+                  {...register("codeYear")}
+                />
+              </FormField>
+              <FormField
+                error={errors.codeSemester?.message}
+                htmlFor="codeSemester"
+                label="Semester code"
+              >
+                <Input
+                  id="codeSemester"
+                  inputMode="numeric"
+                  maxLength={2}
+                  placeholder="30"
+                  {...register("codeSemester")}
+                />
+              </FormField>
+            </div>
+          ) : null}
           <FormField
             error={errors.password?.message}
             htmlFor="temporarypassword"

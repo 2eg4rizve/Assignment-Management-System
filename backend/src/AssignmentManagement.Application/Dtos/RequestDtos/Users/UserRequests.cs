@@ -7,7 +7,6 @@ namespace AssignmentManagement.Application.Dtos.RequestDtos.Users;
 
 public sealed record CreateUserRequest
 {
-    private const string StudentCodePattern = @"^[A-Za-z]\d{6}$";
     [Required, StringLength(ValidationConstants.NameMaxLength)]
     public string FirstName { get; init; } = string.Empty;
 
@@ -23,13 +22,13 @@ public sealed record CreateUserRequest
     [EnumDataType(typeof(UserRole))]
     public UserRole Role { get; init; }
 
-    [StringLength(30), RegularExpression(StudentCodePattern,
-        ErrorMessage = "Student ID must use a format such as C263001.")]
-    public string? StudentCode { get; init; }
+    public Guid? StudentCourseId { get; init; }
 
-    [StringLength(30), RegularExpression(@"^[A-Za-z]\d{6}$",
-        ErrorMessage = "Teacher ID must use a format such as T263001.")]
-    public string? TeacherCode { get; init; }
+    [RegularExpression(@"^\d{2}$", ErrorMessage = "Year must contain two digits.")]
+    public string? CodeYear { get; init; }
+
+    [RegularExpression(@"^\d{2}$", ErrorMessage = "Semester must contain two digits.")]
+    public string? CodeSemester { get; init; }
 }
 
 public sealed record UpdateUserRequest

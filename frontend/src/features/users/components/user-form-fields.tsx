@@ -16,8 +16,6 @@ type UserFields = {
   firstName: string;
   lastName: string;
   role: UserRole;
-  studentCode?: string;
-  teacherCode?: string;
 };
 
 type UserFieldName = keyof UserFields;
@@ -27,6 +25,8 @@ type UserFormFieldsProps = {
   register: (name: UserFieldName) => ComponentProps<"input">;
   role: UserRole;
   setRole: (role: UserRole) => void;
+  studentCode?: string;
+  teacherCode?: string;
 };
 
 export function UserFormFields({
@@ -34,6 +34,8 @@ export function UserFormFields({
   register,
   role,
   setRole,
+  studentCode,
+  teacherCode,
 }: UserFormFieldsProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
@@ -54,38 +56,24 @@ export function UserFormFields({
       </div>
       {role === "Student" ? (
         <div className="sm:col-span-2">
-          <FormField
-            error={errors.studentCode}
-            htmlFor="studentCode"
-            label="Student ID"
-          >
-            <Input
-              id="studentCode"
-              placeholder="C263001"
-              {...register("studentCode")}
-            />
-          </FormField>
-          <p className="text-muted-foreground mt-1 text-xs">
-            Course – admission year – semester – serial number
-          </p>
+          <Label htmlFor="studentCode">Student ID</Label>
+          <Input
+            className="mt-2"
+            id="studentCode"
+            readOnly
+            value={studentCode ?? "Generated automatically when saved"}
+          />
         </div>
       ) : null}
       {role === "Teacher" ? (
         <div className="sm:col-span-2">
-          <FormField
-            error={errors.teacherCode}
-            htmlFor="teacherCode"
-            label="Teacher ID"
-          >
-            <Input
-              id="teacherCode"
-              placeholder="T263001"
-              {...register("teacherCode")}
-            />
-          </FormField>
-          <p className="text-muted-foreground mt-1 text-xs">
-            Teacher – joining year – semester – serial number
-          </p>
+          <Label htmlFor="teacherCode">Teacher ID</Label>
+          <Input
+            className="mt-2"
+            id="teacherCode"
+            readOnly
+            value={teacherCode ?? "Generated automatically when saved"}
+          />
         </div>
       ) : null}
       <div className="space-y-2 sm:col-span-2">

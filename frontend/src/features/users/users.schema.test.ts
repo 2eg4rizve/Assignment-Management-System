@@ -11,31 +11,30 @@ const student = {
 };
 
 describe("createUserSchema", () => {
-  it("accepts a structured student ID", () => {
+  it("accepts student ID generation fields", () => {
     expect(
-      createUserSchema.safeParse({ ...student, studentCode: "C263001" })
-        .success,
+      createUserSchema.safeParse({
+        ...student,
+        studentCourseId: "a4a72d06-9dcc-42a1-af50-dfaf2109f9e6",
+        codeYear: "26",
+        codeSemester: "30",
+      }).success,
     ).toBe(true);
   });
 
-  it("requires a valid student ID for student accounts", () => {
+  it("requires course, year, and semester for student accounts", () => {
     expect(createUserSchema.safeParse(student).success).toBe(false);
-    expect(
-      createUserSchema.safeParse({ ...student, studentCode: "CSE-26-03-001" })
-        .success,
-    ).toBe(false);
   });
 
-  it("requires a structured teacher ID for teacher accounts", () => {
+  it("requires year and semester for teacher accounts", () => {
     const teacher = { ...student, role: "Teacher" as const };
     expect(
-      createUserSchema.safeParse({ ...teacher, teacherCode: "T263001" })
-        .success,
+      createUserSchema.safeParse({
+        ...teacher,
+        codeYear: "26",
+        codeSemester: "30",
+      }).success,
     ).toBe(true);
     expect(createUserSchema.safeParse(teacher).success).toBe(false);
-    expect(
-      createUserSchema.safeParse({ ...teacher, teacherCode: "T-CSE-26-001" })
-        .success,
-    ).toBe(false);
   });
 });

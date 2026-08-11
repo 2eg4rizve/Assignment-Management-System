@@ -71,12 +71,12 @@ export function EditUserForm({
           firstName: errors.firstName?.message,
           lastName: errors.lastName?.message,
           role: errors.role?.message,
-          studentCode: errors.studentCode?.message,
-          teacherCode: errors.teacherCode?.message,
         }}
         register={(name) => register(name)}
         role={role}
         setRole={(role) => setValue("role", role)}
+        studentCode={user.studentCode ?? undefined}
+        teacherCode={user.teacherCode ?? undefined}
       />
       <label className="flex items-center gap-3 text-sm font-medium">
         <input className="size-4" type="checkbox" {...register("isActive")} />

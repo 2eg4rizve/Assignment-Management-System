@@ -7,50 +7,36 @@ const userFields = {
   firstName: z.string().trim().min(1, "First name is required.").max(100),
   lastName: z.string().trim().min(1, "Last name is required.").max(100),
   role: userRoleSchema,
-  studentCode: z.string().trim().max(30).optional(),
-  teacherCode: z.string().trim().max(30).optional(),
 };
 
-const validateRoleCodes = (
+const validateGenerationFields = (
   value: {
     role: z.infer<typeof userRoleSchema>;
-    studentCode?: string;
-    teacherCode?: string;
+    studentCourseId?: string;
+    codeYear?: string;
+    codeSemester?: string;
   },
   context: z.RefinementCtx,
 ) => {
-  if (value.role === "Student" && !value.studentCode) {
+  if (value.role === "Student" && !value.studentCourseId) {
     context.addIssue({
       code: "custom",
-      path: ["studentCode"],
-      message: "Student ID is required.",
-    });
-  } else if (
-    value.role === "Student" &&
-    value.studentCode &&
-    !/^[A-Za-z]\d{6}$/.test(value.studentCode)
-  ) {
-    context.addIssue({
-      code: "custom",
-      path: ["studentCode"],
-      message: "Use a format such as C263001.",
+      path: ["studentCourseId"],
+      message: "Course is required.",
     });
   }
-  if (value.role === "Teacher" && !value.teacherCode) {
+  if (value.role !== "Admin" && !/^\d{2}$/.test(value.codeYear ?? "")) {
     context.addIssue({
       code: "custom",
-      path: ["teacherCode"],
-      message: "Teacher ID is required.",
+      path: ["codeYear"],
+      message: "Enter a two-digit year.",
     });
-  } else if (
-    value.role === "Teacher" &&
-    value.teacherCode &&
-    !/^T\d{6}$/i.test(value.teacherCode)
-  ) {
+  }
+  if (value.role !== "Admin" && !/^\d{2}$/.test(value.codeSemester ?? "")) {
     context.addIssue({
       code: "custom",
-      path: ["teacherCode"],
-      message: "Use a format such as T263001.",
+      path: ["codeSemester"],
+      message: "Enter a two-digit semester code.",
     });
   }
 };
@@ -59,15 +45,18 @@ export const createUserSchema = z
   .object({
     ...userFields,
     password: z.string().min(8, "Password must be at least 8 characters."),
+    studentCourseId: z.string().optional(),
+    codeYear: z.string().optional(),
+    codeSemester: z.string().optional(),
   })
-  .superRefine(validateRoleCodes);
+  .superRefine(validateGenerationFields);
 
-export const updateUserSchema = z
-  .object({
-    ...userFields,
-    isActive: z.boolean(),
-  })
-  .superRefine(validateRoleCodes);
+export const updateUserSchema = z.object({
+  ...userFields,
+  studentCode: z.string().trim().max(30).optional(),
+  teacherCode: z.string().trim().max(30).optional(),
+  isActive: z.boolean(),
+});
 
 export const resetPasswordSchema = z.object({
   newPassword: z.string().min(8, "Password must be at least 8 characters."),

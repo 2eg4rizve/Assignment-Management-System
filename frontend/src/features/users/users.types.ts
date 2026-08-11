@@ -23,11 +23,18 @@ export type CreateUserInput = {
   email: string;
   password: string;
   role: UserRole;
-  studentCode?: string;
-  teacherCode?: string;
+  studentCourseId?: string;
+  codeYear?: string;
+  codeSemester?: string;
 };
 
-export type UpdateUserInput = Omit<CreateUserInput, "password"> & {
+export type UpdateUserInput = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: UserRole;
+  studentCode?: string;
+  teacherCode?: string;
   isActive: boolean;
 };
 
