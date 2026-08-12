@@ -200,3 +200,7 @@ Jwt__Secret
 Jwt__AccessTokenMinutes
 Jwt__RefreshTokenDays
 ```
+
+`backend/.env.example` lists all backend variables and safe placeholders. ASP.NET Core does not
+load `.env` files automatically; set these values in the process environment, launch profile,
+hosting platform, or .NET user secrets.

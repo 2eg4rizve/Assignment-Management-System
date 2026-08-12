@@ -132,7 +132,8 @@ For a complete PostgreSQL-backed mutation and cross-role denial check, start the
 
 ## Environment configuration
 
-The frontend template is committed as `frontend/.env.example`. Backend configuration can be overridden with environment variables or .NET user secrets:
+Environment templates are committed as `frontend/.env.example` and `backend/.env.example`.
+Copy the example values into your shell, hosting environment, or .NET user secrets; ASP.NET Core does not load `.env` files automatically. Backend configuration supports:
 
 ```text
 ConnectionStrings__DefaultConnection
