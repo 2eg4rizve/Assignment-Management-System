@@ -162,20 +162,11 @@ Implemented endpoints:
 
 Assignment reads are scoped by role: Admin sees all records, Teacher sees owned records, and Student sees published assignments for active course enrollments. Mutations enforce teacher ownership and optimistic concurrency.
 
-## Next implementation step
+## Implementation status
 
-Implement features vertically in this order:
-
-1. FluentValidation validators for request DTOs
-2. Feature-specific repository contracts and EF implementations
-3. Application service contracts and implementations
-4. Authentication/JWT/refresh-token service
-5. Thin API controllers
-6. Identity role and demo-data seeding
-7. Initial EF Core migration
-8. Unit and integration tests for each workflow
-
-Start with authentication and Admin master data, then implement assignments, submissions, and grading. Do not inject the generic repository directly into controllers.
+The planned authentication, Admin master-data, assignment, submission, review, grading,
+dashboard, filtering, Swagger, migration, seed-data, and automated-test slices are implemented.
+The root README contains the complete evaluator setup and submission instructions.
 
 ## Commands
 

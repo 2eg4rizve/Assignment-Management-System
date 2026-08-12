@@ -1,1 +1,37 @@
 .tools/
+
+# Local environment and secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+secrets.json
+
+# .NET build and user files
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+
+# Node and Next.js build output
+**/node_modules/
+**/.next/
+**/out/
+**/coverage/
+**/playwright-report/
+**/test-results/
+
+# IDE and OS files
+.vs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
