@@ -45,6 +45,43 @@ ai_docs/                                   Project and API documentation
 - PostgreSQL
 - Node.js 24 LTS and npm 11+
 
+## Run with Docker Compose
+
+Docker Compose starts PostgreSQL, the API, and the frontend with health checks and
+a persistent database volume. From the repository root:
+
+```powershell
+docker compose up --build
+```
+
+Open the frontend at `http://localhost:3000`, Swagger at
+`http://localhost:5096/swagger`, or the API health endpoint at
+`http://localhost:5096/health`. The development demo accounts listed below are
+seeded automatically.
+
+Before the first run, create the service environment files from the checked-in
+examples:
+
+```powershell
+Copy-Item backend/.env.example backend/.env
+Copy-Item frontend/.env.example frontend/.env
+```
+
+Compose injects those files into the containers with `env_file`; application
+settings and secrets are not duplicated in `compose.yaml`. The example values
+are intended only for local development. For any non-local deployment, set
+strong database, JWT, and demo passwords in `backend/.env` and disable demo
+seeding.
+
+Useful lifecycle commands:
+
+```powershell
+docker compose up --build -d
+docker compose logs -f
+docker compose down
+docker compose down --volumes # Also deletes the local database volume.
+```
+
 ## Database and backend setup
 
 Create an empty PostgreSQL database named `assignment_management_dev`. Tables do not need to be created manually; the API applies the checked-in EF Core migrations at startup.
