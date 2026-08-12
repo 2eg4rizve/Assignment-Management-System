@@ -50,8 +50,8 @@ public sealed record UpdateUserRequest
         ErrorMessage = "Student ID must use a format such as C263001.")]
     public string? StudentCode { get; init; }
 
-    [StringLength(30), RegularExpression(@"^[A-Za-z]\d{6}$",
-        ErrorMessage = "Teacher ID must use a format such as T263001.")]
+    [StringLength(30), RegularExpression(@"(?i)^teacher\d{6}$",
+        ErrorMessage = "Teacher ID must use a format such as teacher000001.")]
     public string? TeacherCode { get; init; }
 
     public bool IsActive { get; init; }

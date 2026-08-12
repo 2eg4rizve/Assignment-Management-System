@@ -155,8 +155,8 @@ export function UsersPage() {
           <Input
             className="w-36"
             id="teacher-id-filter"
-            maxLength={7}
-            placeholder="T263001"
+            maxLength={13}
+            placeholder="teacher000001"
             value={filters.teacherCode ?? ""}
             onChange={(event) => setFilter("teacherId", event.target.value)}
           />

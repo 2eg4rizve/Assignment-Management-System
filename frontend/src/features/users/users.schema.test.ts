@@ -26,15 +26,8 @@ describe("createUserSchema", () => {
     expect(createUserSchema.safeParse(student).success).toBe(false);
   });
 
-  it("requires year and semester for teacher accounts", () => {
+  it("does not require ID generation fields for teacher accounts", () => {
     const teacher = { ...student, role: "Teacher" as const };
-    expect(
-      createUserSchema.safeParse({
-        ...teacher,
-        codeYear: "26",
-        codeSemester: "30",
-      }).success,
-    ).toBe(true);
-    expect(createUserSchema.safeParse(teacher).success).toBe(false);
+    expect(createUserSchema.safeParse(teacher).success).toBe(true);
   });
 });

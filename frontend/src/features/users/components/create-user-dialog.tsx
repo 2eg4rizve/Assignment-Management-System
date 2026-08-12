@@ -137,12 +137,12 @@ export function CreateUserDialog({
               ) : null}
             </div>
           ) : null}
-          {role !== "Admin" ? (
+          {role === "Student" ? (
             <div className="grid gap-4 sm:grid-cols-2">
               <FormField
                 error={errors.codeYear?.message}
                 htmlFor="codeYear"
-                label={role === "Student" ? "Admission year" : "Joining year"}
+                label="Admission year"
               >
                 <Input
                   id="codeYear"

@@ -129,13 +129,15 @@ public sealed class UserService(
         CreateUserRequest request, CancellationToken cancellationToken)
     {
         if (request.Role == UserRole.Admin) return null;
-        if (string.IsNullOrWhiteSpace(request.CodeYear) ||
-            string.IsNullOrWhiteSpace(request.CodeSemester))
-            throw new ValidationException("Year and semester are required to generate the ID.");
-
         string prefix;
+        string stem;
+        int serialWidth;
+        int maximumSerial;
         if (request.Role == UserRole.Student)
         {
+            if (string.IsNullOrWhiteSpace(request.CodeYear) ||
+                string.IsNullOrWhiteSpace(request.CodeSemester))
+                throw new ValidationException("Year and semester are required to generate the student ID.");
             if (!request.StudentCourseId.HasValue)
                 throw new ValidationException("Course is required to generate a student ID.");
             var courseCode = await dbContext.Courses
@@ -146,14 +148,18 @@ public sealed class UserService(
             prefix = new string(courseCode.Where(char.IsLetterOrDigit).ToArray()).ToUpperInvariant();
             if (string.IsNullOrEmpty(prefix))
                 throw new ValidationException("The selected course does not have a usable code.");
+            stem = $"{prefix}{request.CodeYear}{request.CodeSemester}";
+            serialWidth = 2;
+            maximumSerial = 99;
         }
         else
         {
-            prefix = "T";
+            stem = "teacher";
+            serialWidth = 6;
+            maximumSerial = 999999;
         }
 
-        var stem = $"{prefix}{request.CodeYear}{request.CodeSemester}";
-        if (stem.Length + 2 > 30)
+        if (stem.Length + serialWidth > 30)
             throw new ValidationException("The generated ID exceeds the maximum length.");
         if (dbContext.Database.IsNpgsql())
             await dbContext.Database.ExecuteSqlInterpolatedAsync(
@@ -170,9 +176,9 @@ public sealed class UserService(
             .Select(code => int.TryParse(code[stem.Length..], out var serial) ? serial : 0)
             .DefaultIfEmpty(0)
             .Max();
-        if (lastSerial >= 99)
+        if (lastSerial >= maximumSerial)
             throw new ValidationException("No serial numbers remain for this ID group.");
-        return $"{stem}{lastSerial + 1:00}";
+        return $"{stem}{(lastSerial + 1).ToString($"D{serialWidth}")}";
     }
 
     public async Task<UserDetailResponse> UpdateAsync(
@@ -272,7 +278,7 @@ public sealed class UserService(
         if (role != UserRole.Teacher) return null;
         if (string.IsNullOrWhiteSpace(value))
             throw new ValidationException("Teacher ID is required for teachers.");
-        return value.Trim().ToUpperInvariant();
+        return value.Trim().ToLowerInvariant();
     }
 
     private static void EnsureIdentitySucceeded(IdentityResult result)

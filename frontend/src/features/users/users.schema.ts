@@ -25,14 +25,14 @@ const validateGenerationFields = (
       message: "Course is required.",
     });
   }
-  if (value.role !== "Admin" && !/^\d{2}$/.test(value.codeYear ?? "")) {
+  if (value.role === "Student" && !/^\d{2}$/.test(value.codeYear ?? "")) {
     context.addIssue({
       code: "custom",
       path: ["codeYear"],
       message: "Enter a two-digit year.",
     });
   }
-  if (value.role !== "Admin" && !/^\d{2}$/.test(value.codeSemester ?? "")) {
+  if (value.role === "Student" && !/^\d{2}$/.test(value.codeSemester ?? "")) {
     context.addIssue({
       code: "custom",
       path: ["codeSemester"],

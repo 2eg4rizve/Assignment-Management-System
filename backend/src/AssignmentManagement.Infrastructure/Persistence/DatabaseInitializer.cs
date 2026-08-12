@@ -35,7 +35,7 @@ public static class DatabaseInitializer
         var admin = await EnsureUserAsync(userManager, "admin@assignment.local", "Demo", "Admin",
             "Admin", options.Password);
         var teacher = await EnsureUserAsync(userManager, "teacher@assignment.local", "Demo", "Teacher",
-            "Teacher", options.Password, teacherCode: "T263001");
+            "Teacher", options.Password, teacherCode: "teacher000001");
         var student = await EnsureUserAsync(userManager, "student@assignment.local", "Demo", "Student",
             "Student", options.Password, "C263001");
         await SeedAcademicDataAsync(dbContext, admin.Id, teacher.Id, student.Id, cancellationToken);
