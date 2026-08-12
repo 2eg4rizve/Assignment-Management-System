@@ -48,9 +48,12 @@ ai_docs/                                   Project and API documentation
 ## Run with Docker Compose
 
 Docker Compose starts PostgreSQL, the API, and the frontend with health checks and
-a persistent database volume. From the repository root:
+a persistent database volume. Before the first run, create the service
+environment files from the checked-in examples, then start the stack:
 
 ```powershell
+Copy-Item backend/.env.docker.example backend/.env
+Copy-Item frontend/.env.docker.example frontend/.env
 docker compose up --build
 ```
 
@@ -58,14 +61,6 @@ Open the frontend at `http://localhost:3000`, Swagger at
 `http://localhost:5096/swagger`, or the API health endpoint at
 `http://localhost:5096/health`. The development demo accounts listed below are
 seeded automatically.
-
-Before the first run, create the service environment files from the checked-in
-examples:
-
-```powershell
-Copy-Item backend/.env.example backend/.env
-Copy-Item frontend/.env.example frontend/.env
-```
 
 Compose injects those files into the containers with `env_file`; application
 settings and secrets are not duplicated in `compose.yaml`. The example values
@@ -169,8 +164,15 @@ For a complete PostgreSQL-backed mutation and cross-role denial check, start the
 
 ## Environment configuration
 
-Environment templates are committed as `frontend/.env.example` and `backend/.env.example`.
-Copy the example values into your shell, hosting environment, or .NET user secrets; ASP.NET Core does not load `.env` files automatically. Backend configuration supports:
+Local-development templates are committed as `frontend/.env.example` and
+`backend/.env.example`. Docker-specific templates are committed as
+`frontend/.env.docker.example` and `backend/.env.docker.example` because Compose
+uses the internal service hostnames `api` and `db`.
+
+For a manual backend run, copy the example values into your shell, hosting
+environment, or .NET user secrets; ASP.NET Core does not load `.env` files by
+itself. Docker Compose does load `backend/.env` through its `env_file`
+configuration. Backend configuration supports:
 
 ```text
 ConnectionStrings__DefaultConnection

@@ -20,6 +20,22 @@ Open `http://localhost:3000`.
 
 `API_BASE_URL` is server-only. Do not rename it with a `NEXT_PUBLIC_` prefix or expose backend credentials in frontend environment files.
 
+## Docker Compose
+
+For the complete containerized stack, run these commands from the repository
+root:
+
+```powershell
+Copy-Item backend/.env.docker.example backend/.env
+Copy-Item frontend/.env.docker.example frontend/.env
+docker compose up --build
+```
+
+Open `http://localhost:3000`. The Docker-specific frontend environment uses
+`http://api:8080/api/v1`, which is reachable only inside the Compose network.
+The regular `.env.example` deliberately uses `localhost` for running Next.js
+directly on the host.
+
 ## Quality commands
 
 ```powershell

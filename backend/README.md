@@ -177,6 +177,21 @@ dotnet test AssignmentManagement.sln
 dotnet run --project src/AssignmentManagement.Api
 ```
 
+## Docker Compose
+
+The repository-level Compose stack runs PostgreSQL, this API, and the frontend.
+From the repository root:
+
+```powershell
+Copy-Item backend/.env.docker.example backend/.env
+Copy-Item frontend/.env.docker.example frontend/.env
+docker compose up --build
+```
+
+The API is then available at `http://localhost:5096`, while containers connect
+to PostgreSQL using the internal hostname `db`. See the root README for health
+endpoints, demo credentials, and lifecycle commands.
+
 On startup, the API applies pending migrations and ensures the `Admin`, `Teacher`, and
 `Student` roles exist. Development demo seeding is controlled by the `DemoSeed`
 configuration section. The checked-in development configuration creates these users:
@@ -201,6 +216,11 @@ Jwt__AccessTokenMinutes
 Jwt__RefreshTokenDays
 ```
 
-`backend/.env.example` lists all backend variables and safe placeholders. ASP.NET Core does not
-load `.env` files automatically; set these values in the process environment, launch profile,
-hosting platform, or .NET user secrets.
+`backend/.env.example` contains values for running the API directly against a
+database on `localhost`. ASP.NET Core does not load `.env` files automatically;
+set these values in the process environment, launch profile, hosting platform,
+or .NET user secrets.
+
+`backend/.env.docker.example` contains the Docker network configuration. Copy it
+to `backend/.env`; Compose injects that file into both the API and PostgreSQL
+containers through `env_file`.
