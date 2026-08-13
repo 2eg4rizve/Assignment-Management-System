@@ -15,6 +15,12 @@ A full-stack, role-based school/college application built for the Assistant Soft
 - Problem Details error responses, structured logging, health checks, and Swagger
 - PostgreSQL migrations and idempotent development seed data
 
+## Demo video
+
+A recorded walkthrough demonstrates the Admin, Teacher, and Student frontend workflows:
+
+[Watch the Assignment Management System demo video on Google Drive](https://drive.google.com/file/d/1EQdwUe2gf62zbkpJjPiY22L2FFOteZxR/view?usp=sharing)
+
 ## Technology stack
 
 - Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui, TanStack Query, React Hook Form, and Zod
@@ -36,14 +42,14 @@ frontend/
   src/features/                            Feature modules
   src/shared/                              Shared UI, API, and utilities
   tests/e2e/                               Browser workflows
-ai_docs/                                   Project and API documentation
 ```
 
 ## Prerequisites
 
-- .NET SDK 9
-- PostgreSQL
-- Node.js 24 LTS and npm 11+
+Choose one setup path:
+
+- Docker setup: Docker Desktop or Docker Engine with Docker Compose
+- Manual setup: .NET SDK 9, PostgreSQL, Node.js 24 LTS, and npm 11+
 
 ## Run with Docker Compose
 
@@ -206,4 +212,4 @@ Do not commit production passwords, JWT secrets, API keys, `.env.local`, or user
 - Swagger is enabled only in the Development environment.
 - Production deployment, monitoring, backup policy, and a manual WCAG/screen-reader audit depend on the target hosting environment.
 
-More detailed documents are available in [backend/README.md](backend/README.md), [frontend/README.md](frontend/README.md), and [ai_docs/API_DOCUMENTATION.md](ai_docs/API_DOCUMENTATION.md).
+More implementation details are available in [backend/README.md](backend/README.md) and [frontend/README.md](frontend/README.md).
