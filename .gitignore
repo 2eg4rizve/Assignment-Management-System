@@ -1,6 +1,7 @@
 .tools/
 ai_docs/
 AGENTS.md
+demo-videos/
 
 # Local environment and secrets
 .env
